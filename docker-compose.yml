@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+  db:
+    container_name: 'mariage-dockerdb'
+    platform: linux/x86_64
+    image: 'mysql:8'
+    restart: 'always'
+    command: --default-authentication-plugin=mysql_native_password --sql_mode="NO_ENGINE_SUBSTITUTION"
+    cap_add:
+      - SYS_NICE # CAP_SYS_NICE
+    ports:
+      - 3307:3306
+    volumes:
+      - ./db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD:-psswd}'
+      MYSQL_DATABASE: 'mariage'
+    # Healthcheck to prevent that other containers launch
+    # without waiting the DB to be actually ready
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 3s
+      timeout: 59s
+      retries: 10
