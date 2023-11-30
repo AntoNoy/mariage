@@ -3,9 +3,7 @@ import { InjectDataSource } from "@nestjs/typeorm";
 import { Users } from "./schemas/users";
 import { DataSource } from "typeorm";
 import { Guests } from "./schemas/guests";
-import * as argon2 from 'argon2';
 import { GuestCreate, UsersCreate } from "./definitions";
-
 
 
 
@@ -16,8 +14,7 @@ export class EntitiesService {
     ) { }
 
     async createUser(payload: UsersCreate, guests: GuestCreate[]) {
-        const hashedPassword = await argon2.hash(payload.password, { type: argon2.argon2id });
-        const user = await this.dataSource.manager.save(Users, { ...payload, password: hashedPassword })
+        const user = await this.dataSource.manager.save(Users, { ...payload })
         await this.dataSource.manager.save(Guests, guests.map(guest => ({
             ...guest,
             userId: user.id,
