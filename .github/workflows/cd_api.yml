@@ -63,5 +63,4 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /volume1/www/mariage-api/api
-            npm run stop:prod
-            npm run start:prod
+            bash script-start.sh
