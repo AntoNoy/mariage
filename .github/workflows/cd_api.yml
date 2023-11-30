@@ -34,7 +34,7 @@ jobs:
         working-directory: api
         run: npm run build
 
-      - name: copy file to server
+      - name: 📂 Copy file to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{secrets.SSH_HOST}}
