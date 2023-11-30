@@ -25,9 +25,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
-      - name: check files1
-        working-directory: api
-        run: ls
 
       - name: Install npm dependencies
         working-directory: api
@@ -37,17 +34,6 @@ jobs:
         working-directory: api
         run: npm run build
 
-      - name: "Create env file"
-        working-directory: api
-        run: |
-          touch .env
-          echo ${{ secrets.ENV_FILE }} >> .env
-          cat .env
-
-      - name: check files2
-        working-directory: api
-        run: ls
-
       - name: copy file to server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -56,7 +42,18 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           rm: true
           source: api/*
-          target: /volume1/www/mariage/api/
+          target: /volume1/www/mariage-api/
+
+      - name: create .env file
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /volume1/www/mariage-api/api
+            echo '${{secrets.ENV_FILE}}' > .env
+            ls -la
 
       - name: start api
         uses: appleboy/ssh-action@v1.0.0
@@ -65,15 +62,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /volume1/www/mariage/api
-            ls -la api
-            node ./api/dist/main.js
-
-#    - name: Copy folder content recursively to remote
-#      uses: garygrossgarten/github-action-scp@release
-#      with:
-#          local: api/README.md
-#          remote: /volume1/www/mariage/api
-#          host: ${{secrets.SSH_HOST}}
-#          username: ${{ secrets.SSH_USER }}
-#          password: ${{ secrets.SSH_PASSWORD }}
+            cd /volume1/www/mariage-api/api
+            npm run stop:prod
+            npm run start:prod
