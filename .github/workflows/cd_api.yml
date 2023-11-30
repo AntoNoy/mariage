@@ -1,0 +1,80 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build back CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Production
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.x'
+    - name: check files1
+      working-directory: api
+      run: ls
+
+    - name: Install npm dependencies
+      working-directory: api
+      run: npm ci
+    
+    - name: Run build task
+      working-directory: api
+      run: npm run build
+
+
+    # - name: Install dependencies
+    #   working-directory: api
+    #   run: npm ci
+    # - name: Build app
+    #   working-directory: api
+    #   run: npm run build
+      
+    # - name: check files2
+    #   working-directory: api
+    #   run: ls
+
+    - name: copy file to server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{secrets.SSH_HOST}}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        rm: true
+        source: api/*
+        target: /volume1/www/mariage/api/
+    
+    - name: start api
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{secrets.SSH_HOST}}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          cd /volume1/www/mariage/api
+          ls -la api
+          node ./api/dist/main.js
+
+#    - name: Copy folder content recursively to remote
+#      uses: garygrossgarten/github-action-scp@release
+#      with:
+#          local: api/README.md
+#          remote: /volume1/www/mariage/api
+#          host: ${{secrets.SSH_HOST}}
+#          username: ${{ secrets.SSH_USER }}
+#          password: ${{ secrets.SSH_PASSWORD }}
