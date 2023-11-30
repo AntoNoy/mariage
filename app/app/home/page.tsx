@@ -1,12 +1,10 @@
 "use client"
-
-import React from "react";
-
-export default function HomePage({children}: {children: React.ReactNode}) {
+export default function HomePage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       appli
-      {children}
+      
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 
-export default function RootPage({ children }: { children: React.ReactNode }) {
+export default function RootPage() {
   console.log('rootPage')
   
-  return {children};
+  return (<div>rootPage</div>);
 }

@@ -1,21 +1,32 @@
 "use client";
 import { Box, Button, Checkbox, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
+import { parseCookies, setCookie } from "nookies";
 
 const LoginComponennt = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter()
+  const router = useRouter();
+
+  useEffect(() => {
+    const { token } = parseCookies();
+    console.log("cookieStore", token);
+    if (token) {
+      router.push("/home");
+    }
+  }, []);
 
   const onSubmit = (form: any) => {
-        setIsLoading(true);
-        
-        console.log(username, password);
-        localStorage.setItem("token", "token-"+username);
-        router.push("/home");
-        setIsLoading(false);
+    setIsLoading(true);
+
+    console.log(username, password);
+    setCookie(null, "token", `token-${username}`, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
+    router.push("/home");
     // fetch("url")
     //   .then((response) => {
     //     console.log(response.body);
@@ -26,6 +37,7 @@ const LoginComponennt = () => {
     //   .finally(() => {
     //     setIsLoading(false);
     //   });
+    setIsLoading(false);
   };
 
   const onLoginSuccess = ({
@@ -36,11 +48,11 @@ const LoginComponennt = () => {
     refreshToken: string;
     email: string;
   }) => {
-    // setCookie(null, "token", token, { maxAge: 30 * 24 * 60 * 60, path: "/" });
-    // setCookie(null, "refreshToken", refreshToken, {
-    //   maxAge: 30 * 24 * 60 * 60,
-    //   path: "/",
-    // });
+    setCookie(null, "token", token, { maxAge: 30 * 24 * 60 * 60, path: "/" });
+    setCookie(null, "refreshToken", refreshToken, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
     // localStorage.setItem(
     //   "lastLoginDateOrLastLocationUpdate",
     //   new Date().toLocaleDateString()
@@ -80,7 +92,7 @@ const LoginComponennt = () => {
           id="outlined-required"
           label="Username"
           defaultValue=""
-          InputLabelProps={{ shrink: true }}
+          // InputLabelProps={{ shrink: true }}
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
@@ -89,7 +101,7 @@ const LoginComponennt = () => {
           label="Password"
           type="password"
           defaultValue=""
-          InputLabelProps={{ shrink: true }}
+          // InputLabelProps={{ shrink: true }}
           onChange={(e) => setPassword(e.target.value)}
         />
 

@@ -13,6 +13,8 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.18",
     "next": "14.0.3",
+    "next-cookies-universal": "^1.0.1",
+    "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18"
   },
