@@ -37,26 +37,37 @@ jobs:
         working-directory: api
         run: npm run build
 
-      - name: 📂 Copy file to server
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          rm: true
-          source: api/*
-          target: /volume1/www/mariage-api/
+      - name: Create .env file
+        working-directory: api
+        run: |
+          echo '${{secrets.ENV_FILE}}' > .env
+        shell: bash
+      
+      - name: check files
+        working-directory: api
+        run: ls -la
 
-      - name: create .env file
-        uses: appleboy/ssh-action@v1.0.0
+      - name: 📂 Sync files
+        uses: Dylan700/sftp-upload-action@latest
         with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd /volume1/www/mariage-api/api
-            echo '${{secrets.ENV_FILE}}' > .env
-            ls -la
+          server: ${{secrets.FTP_HOST}}
+          username: ${{secrets.FTP_USER}}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          delete: true
+          uploads: |
+            ./api => ./mariage-api/
+
+      # - name: create .env file
+      #   uses: appleboy/ssh-action@v1.0.0
+      #   with:
+      #     host: ${{secrets.SSH_HOST}}
+      #     username: ${{ secrets.SSH_USER }}
+      #     password: ${{ secrets.SSH_PASSWORD }}
+      #     script: |
+      #       cd /volume1/www/mariage-api/api
+      #       echo '${{secrets.ENV_FILE}}' > .env
+      #       ls -la
 
       # - name: start api
       #   uses: appleboy/ssh-action@v1.0.0
