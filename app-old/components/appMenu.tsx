@@ -9,10 +9,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import InfoIcon from "@mui/icons-material/Info";
 import { useRouter } from "next/navigation";
-import theme from "../ThemeRegistry/theme";
+import theme from "./ThemeRegistry/theme";
 import PeopleIcon from '@mui/icons-material/People';
-import { logout } from "@/services/auth";
-import { destroyCookie } from "nookies";
 
 
 export default function AppMenu() {
@@ -83,6 +81,32 @@ export default function AppMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+      
+        <MenuItem
+          onClick={() => {
+            handleClose;
+            router.push("/home/guests");
+          }}
+        >
+          <ListItemIcon>
+            <PeopleIcon fontSize="medium" />
+          </ListItemIcon>Invités
+        </MenuItem>
+
+
+        <MenuItem
+          onClick={() => {
+            handleClose;
+            router.push("/home/informations");
+          }}
+        >
+          <ListItemIcon>
+            <InfoIcon fontSize="medium" />
+          </ListItemIcon>
+          Information diverses
+        </MenuItem>
+
+        <Divider />
 
         <MenuItem onClick={handleClose}>
           <Avatar /> Mon compte
@@ -91,7 +115,6 @@ export default function AppMenu() {
         <MenuItem
           onClick={() => {
             handleClose;
-            destroyCookie(null, "token");
             router.push("/login");
           }}
         >
