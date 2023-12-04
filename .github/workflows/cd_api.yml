@@ -24,26 +24,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js
+      - name: 🧊 Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
 
-      - name: Install npm dependencies
+      - name: ⤵️ Install npm dependencies
         working-directory: api
         run: npm ci
 
-      - name: Build app
+      - name: 🏗️ Build app
         working-directory: api
         run: npm run build
 
-      - name: Create .env file
+      - name: 🔐 Create .env file
         working-directory: api
         run: |
           echo '${{secrets.ENV_FILE}}' > .env
         shell: bash
       
-      - name: check files
+      - name: ✔️ check files
         working-directory: api
         run: ls -la
 
@@ -57,18 +57,7 @@ jobs:
           source: api/*
           target: /var/www/mariage-api/
 
-      # - name: create .env file
-      #   uses: appleboy/ssh-action@v1.0.0
-      #   with:
-      #     host: ${{secrets.SSH_HOST}}
-      #     username: ${{ secrets.SSH_USER }}
-      #     password: ${{ secrets.SSH_PASSWORD }}
-      #     script: |
-      #       cd /volume1/www/mariage-api/api
-      #       echo '${{secrets.ENV_FILE}}' > .env
-      #       ls -la
-
-      - name: start api
+      - name: 🟡 Start api
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{secrets.SSH_HOST}}
