@@ -68,12 +68,11 @@ jobs:
       #       echo '${{secrets.ENV_FILE}}' > .env
       #       ls -la
 
-      # - name: start api
-      #   uses: appleboy/ssh-action@v1.0.0
-      #   with:
-      #     host: ${{secrets.SSH_HOST}}
-      #     username: ${{ secrets.SSH_USER }}
-      #     password: ${{ secrets.SSH_PASSWORD }}
-      #     script: |
-      #       cd /volume1/www/mariage-api/api
-      #       bash script-start.sh
+      - name: start api
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            pm2 reload api-mariage
