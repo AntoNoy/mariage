@@ -47,16 +47,15 @@ jobs:
         working-directory: api
         run: ls -la
 
-      - name: 📂 Sync files
-        uses: Dylan700/sftp-upload-action@latest
+      - name: 📂 Copy file to server
+        uses: appleboy/scp-action@v0.1.4
         with:
-          server: ${{secrets.FTP_HOST}}
-          username: ${{secrets.FTP_USER}}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
-          delete: true
-          uploads: |
-            ./api => ./mariage-api/
+          host: ${{secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          rm: true
+          source: api/*
+          target: /var/www/mariage-api/
 
       # - name: create .env file
       #   uses: appleboy/ssh-action@v1.0.0
