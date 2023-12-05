@@ -1,16 +1,41 @@
-"use client";
-import { Box, Button, Checkbox, TextField } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
-import { parseCookies, setCookie } from "nookies";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { parseCookies, setCookie } from 'nookies';
+import { useRouter } from 'next/router';
+import theme from '@/ThemeRegistry/theme';
 
-const LoginComponennt = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function Copyright(props: any) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+// TODO remove, this demo shouldn't need to reset the theme.
+const defaultTheme = createTheme();
+
+export default function SignInSide() {
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const { token } = parseCookies();
     console.log("cookieStore", token);
     if (token) {
@@ -18,99 +43,105 @@ const LoginComponennt = () => {
     }
   }, []);
 
-  const onSubmit = (form: any) => {
-    setIsLoading(true);
-
-    console.log(username, password);
-    setCookie(null, "token", `token-${username}`, {
+  
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+    });
+    setCookie(null, "token", `token-${data.get('email')}`, {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
     router.push("/home");
-    // fetch("url")
-    //   .then((response) => {
-    //     console.log(response.body);
-    //   })
-    //   .catch((error) => {
-    //     onLoginError(error);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
-    setIsLoading(false);
-  };
-
-  const onLoginSuccess = ({
-    token,
-    refreshToken,
-  }: {
-    token: string;
-    refreshToken: string;
-    email: string;
-  }) => {
-    setCookie(null, "token", token, { maxAge: 30 * 24 * 60 * 60, path: "/" });
-    setCookie(null, "refreshToken", refreshToken, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: "/",
-    });
-    // localStorage.setItem(
-    //   "lastLoginDateOrLastLocationUpdate",
-    //   new Date().toLocaleDateString()
-    // );
-    // const userRoles = jwt_decode<{ roles: string[] }>(token).roles;
-    // localStorage.setItem("userRoles", userRoles.join(","));
-    // openNotification({
-    //   type: "success",
-    //   message: "Connecté !",
-    // });
-    // router.push("/");
-  };
-
-  const onLoginError = (error: any) => {
-    console.log(error);
-    // openNotification({
-    //   type: "error",
-    //   message: getErrorMessageIfExplicit(
-    //     error?.response?.data,
-    //     `Connexion impossible, déso: ${error?.response?.data?.message}`
-    //   ),
-    // });
   };
 
   return (
-    <>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          required
-          id="outlined-required"
-          label="Username"
-          defaultValue=""
-          // InputLabelProps={{ shrink: true }}
-          onChange={(e) => setUsername(e.target.value)}
+    <ThemeProvider theme={defaultTheme}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         />
-        <TextField
-          required
-          id="outlined-required"
-          label="Password"
-          type="password"
-          defaultValue=""
-          // InputLabelProps={{ shrink: true }}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <Button variant="contained" color="primary" onClick={onSubmit}>
-          Login
-        </Button>
-      </Box>
-    </>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, color: theme.palette.primary.main, bgcolor: 'white' }}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+              <Copyright sx={{ mt: 5 }} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
-};
-
-export default LoginComponennt;
+}
