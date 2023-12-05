@@ -14,19 +14,21 @@ import AppMenu from "@/components/appMenu";
 import { useRouter } from "next/router";
 import InfoIcon from "@mui/icons-material/Info";
 import HomeIcon from "@mui/icons-material/Home";
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import PeopleIcon from '@mui/icons-material/People';
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import PeopleIcon from "@mui/icons-material/People";
 import { use, useEffect, useState } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
-  
   const router = useRouter();
   const [value, setValue] = useState(router.pathname);
 
   useEffect(() => {
-    setValue(router.pathname)
-  }, [router.pathname])
+    setValue(router.pathname);
+  }, [router.pathname]);
 
+  if (value === "/login") {
+    return <Component {...pageProps} />;
+  }
   return (
     <>
       <ThemeRegistry>
@@ -65,13 +67,29 @@ export default function App({ Component, pageProps }: AppProps) {
             value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
-              router.push(newValue)
+              router.push(newValue);
             }}
           >
-            <BottomNavigationAction label="Accueil" value={'/home'} icon={<HomeIcon />} />
-            <BottomNavigationAction label="Informations" value={'/home/informations'} icon={<InfoIcon />} />
-            <BottomNavigationAction label="Repas" value={'/home/festive-meal'} icon={<RestaurantIcon />} />
-            <BottomNavigationAction label="Invités" value={'/home/guests'} icon={<PeopleIcon />} />
+            <BottomNavigationAction
+              label="Accueil"
+              value={"/home"}
+              icon={<HomeIcon />}
+            />
+            <BottomNavigationAction
+              label="Informations"
+              value={"/home/informations"}
+              icon={<InfoIcon />}
+            />
+            <BottomNavigationAction
+              label="Repas"
+              value={"/home/festive-meal"}
+              icon={<RestaurantIcon />}
+            />
+            <BottomNavigationAction
+              label="Invités"
+              value={"/home/guests"}
+              icon={<PeopleIcon />}
+            />
           </BottomNavigation>
         </Paper>
       </ThemeRegistry>
