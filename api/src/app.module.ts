@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RouteApiModule } from './routes/routes.api.module';
-import { EntitiesModule } from './entities/entities.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { RouteApiModule } from "./routes/routes.api.module";
+import { EntitiesModule } from "./entities/entities.module";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
-console.log(__dirname + '/../src/entities/schemas/*{.ts,.js}');
+console.log(__dirname + "/../src/entities/schemas/*{.ts,.js}");
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -23,17 +23,17 @@ console.log(__dirname + '/../src/entities/schemas/*{.ts,.js}');
             DB_PORT: number;
           },
           true
-        >,
+        >
       ) => ({
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-        entities: [__dirname + '/**/entities/schemas/*{.ts,.js}'],
+        type: "mysql",
+        host: configService.get("DB_HOST"),
+        port: configService.get("DB_PORT"),
+        username: configService.get("DB_USER"),
+        password: configService.get("DB_PASSWORD"),
+        database: configService.get("DB_DATABASE"),
+        entities: [__dirname + "/**/entities/schemas/*{.ts,.js}"],
         synchronize: true,
-        logging: ['query'],
+        logging: ["query"],
       }),
     }),
     EntitiesModule,
@@ -42,4 +42,4 @@ console.log(__dirname + '/../src/entities/schemas/*{.ts,.js}');
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

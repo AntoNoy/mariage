@@ -6,11 +6,11 @@ import { Users } from "./schemas/users";
 
 @Global()
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Users]),
-        TypeOrmModule.forFeature([Guests]),
-    ],
-    providers: [EntitiesService],
-    exports: [EntitiesService]
+  imports: [
+    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Guests]),
+  ],
+  providers: [EntitiesService],
+  exports: [EntitiesService],
 })
-export class EntitiesModule { }
+export class EntitiesModule {}
