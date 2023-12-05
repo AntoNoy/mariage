@@ -10,6 +10,14 @@ import { GuestCreate, UsersCreate } from "./definitions";
 export class EntitiesService {
   constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
 
+  get getRepository() {
+    return this.dataSource.getRepository;
+  }
+
+  get manager() {
+    return this.dataSource.manager;
+  }
+
   async createUser(payload: UsersCreate, guests: GuestCreate[]) {
     const hashedPassword = await argon2.hash(payload.password, {
       type: argon2.argon2id,
@@ -23,7 +31,7 @@ export class EntitiesService {
       guests.map((guest) => ({
         ...guest,
         userId: user.id,
-        firstname: guest.firstname ? guest.firstname : user.userName,
+        firstname: guest.firstname ? guest.firstname : user.username,
       }))
     );
   }

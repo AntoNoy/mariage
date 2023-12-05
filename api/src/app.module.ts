@@ -5,11 +5,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { RouteApiModule } from "./routes/routes.api.module";
 import { EntitiesModule } from "./entities/entities.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
 
 console.log(__dirname + "/../src/entities/schemas/*{.ts,.js}");
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({isGlobal:true}),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -36,6 +37,7 @@ console.log(__dirname + "/../src/entities/schemas/*{.ts,.js}");
         logging: ["query"],
       }),
     }),
+    JwtModule.register({global:true}),
     EntitiesModule,
     RouteApiModule,
   ],

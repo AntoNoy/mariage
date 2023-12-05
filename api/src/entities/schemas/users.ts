@@ -20,7 +20,7 @@ export class Users {
   uuid: string;
 
   @Column({ name: "username", type: "varchar", length: 255 })
-  userName: string;
+  username: string;
 
   @Column({ name: "email", type: "varchar", length: 255, nullable: true })
   email: string;
@@ -34,6 +34,9 @@ export class Users {
   @Column({ name: "role", type: "enum", enum: Roles, default: Roles.GUEST })
   role: Roles;
 
+  @Column({ type: "boolean", name: "with_dinner", default: false })
+  withDinner: boolean;
+
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   created_at: Date;
 
@@ -41,9 +44,9 @@ export class Users {
   updated_at: Date;
 
   @OneToMany(() => Guests, (guest) => guest.user)
-  guest: Guests[];
+  guests: Guests[];
 
   get isFull() {
-    return this.userName && this.email && this.password && this.phone;
+    return this.username && this.email && this.password && this.phone;
   }
 }

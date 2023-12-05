@@ -39,8 +39,11 @@ export class Guests {
   })
   type: TypeGuest;
 
-  @Column({ type: "boolean", name: "with_dinner", default: false })
-  withDinner: boolean;
+  @Column({ type: "boolean", name: "reception", default: null, nullable: true })
+  reception: boolean | null;
+
+  @Column({ type: "boolean", name: "dinner", default: null, nullable: true })
+  dinner: boolean | null;
 
   @Column({
     name: "food_allergies",
@@ -59,7 +62,7 @@ export class Guests {
   @Column({ name: "user_id", type: "int" })
   userId: number;
 
-  @ManyToOne(() => Users, (users) => users.guest)
+  @ManyToOne(() => Users, (users) => users.guests)
   @JoinColumn({ name: "user_id" })
   user: Users[];
 }
