@@ -39,10 +39,10 @@ export class Guests {
   })
   type: TypeGuest;
 
-  @Column({ type: "boolean", name: "reception", default: null, nullable: true })
+  @Column({ type: "boolean", name: "reception", default: false })
   reception: boolean | null;
 
-  @Column({ type: "boolean", name: "dinner", default: null, nullable: true })
+  @Column({ type: "boolean", name: "dinner", default: false })
   dinner: boolean | null;
 
   @Column({

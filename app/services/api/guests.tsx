@@ -3,8 +3,6 @@ import axios from "axios";
 export enum TypeGuest {
     ADULT = 'adult',
     CHILD = 'child',
-    TEEN= 'teen',
-    BABY = 'baby',
 }
 
 export function translateGuestType(type: TypeGuest){
@@ -13,10 +11,6 @@ export function translateGuestType(type: TypeGuest){
             return 'Adulte';
         case TypeGuest.CHILD:
             return 'Enfant';
-        case TypeGuest.TEEN:
-            return 'Adolescent';
-        case TypeGuest.BABY:
-            return 'Bébé';
     }
 }
 
@@ -26,8 +20,8 @@ export interface Guests {
     type:TypeGuest;
     lastname: string|null;
     birthyear: number|null;
-    wineReception: boolean|null;
-    dinner:boolean|null;
+    reception: boolean;
+    dinner: boolean;
 }
 
 const axiosInstance = axios.create({

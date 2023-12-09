@@ -20,15 +20,20 @@ import { use, useEffect, useState } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const [value, setValue] = useState(router.pathname);
+  const [pathname, setPathname] = useState(router.pathname);
 
   useEffect(() => {
-    setValue(router.pathname);
+    setPathname(router.pathname);
   }, [router.pathname]);
 
-  if (value === "/login") {
-    return <Component {...pageProps} />;
+  if (!pathname.startsWith("/home")) {
+    return (
+      <ThemeRegistry>
+          <Component {...pageProps} />
+      </ThemeRegistry>
+    );
   }
+
   return (
     <>
       <ThemeRegistry>
@@ -64,9 +69,9 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           <BottomNavigation
             showLabels
-            value={value}
+            value={pathname}
             onChange={(event, newValue) => {
-              setValue(newValue);
+              setPathname(newValue);
               router.push(newValue);
             }}
           >

@@ -20,13 +20,14 @@ const theme = createTheme({
     },
     text: {
       primary: '#565656',
-      secondary: '#000000',
+      secondary: '#984537',
     },
     background: {
       default: '#ffffff',
       paper: '#ffffff',
     },
   },
+
   typography: { 
     fontFamily: roboto.style.fontFamily,
   },

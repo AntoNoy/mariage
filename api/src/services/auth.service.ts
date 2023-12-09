@@ -9,6 +9,8 @@ import { Users } from "src/entities/schemas/users";
 import { ConfigService } from "@nestjs/config";
 import { omit } from "lodash";
 import { Guests } from "src/entities/schemas/guests";
+import { AccessToken } from "./auth.definitions";
+import * as argon2 from "argon2";
 
 @Injectable()
 export class AuthService {
@@ -17,34 +19,23 @@ export class AuthService {
   constructor(
     private readonly daoService: EntitiesService,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService<{
+      JWT_SECRET: string,
+      JWT_TIME: number
+    }, true>
   ) {
-    // this.initDataTest();
   }
 
-  // async initDataTest() {
-  //   console.log("initDataTest");
-  //   const users = [
-  //     { email: "test@aa.a", password: "azerty", userName: "aa" },
-  //     { email: "test@aa.a", password: "azerty", userName: "bb" },
-  //     { email: "test@aa.a", password: "azerty", userName: "cc" },
-  //   ];
-
-  //   await Promise.all(users.map((user) => this.addUser(user)));
-  // }
-
-  private userBasic(user, omitMore?: string[]) {
+  private userBasic(user, omitMore = []) {
     return omit(user, [
       "password",
-      "withDinner",
-      "role",
       "createTime",
       "updateTime",
       ...omitMore,
     ]);
   }
 
-  async initUser(uuid: string) {
+  async initUser(uuid: string): Promise<AccessToken | Partial<Users>> {
     const user = await this.daoService
       .getRepository(Users)
       .findOne({ where: { uuid }, relations: ["guests"] });
@@ -60,7 +51,7 @@ export class AuthService {
     return this.userBasic(user);
   }
 
-  async validUser(userPayload: Users) {
+  async validUser(userPayload: Users): Promise<AccessToken> {
     const user = await this.usersRepo.findOne({
       where: { id: userPayload.id, uuid: userPayload.uuid },
       relations: ["guests"],
@@ -80,22 +71,36 @@ export class AuthService {
     if (user.role !== userPayload.role) {
       throw new BadRequestException("T'as tjr pas compris ?");
     }
-
+    const hashedPassword = await argon2.hash(userPayload.password, {
+      type: argon2.argon2id,
+    })
     await this.daoService.manager
       .createQueryBuilder(Users, "user")
       .update()
-      .where("user.id = :userId", { userId: user.id })
-      .set(this.userBasic({ ...user, ...userPayload }, ["guests"]))
+      .where("id = :userId", { userId: user.id })
+      .set({
+        username: userPayload.username,
+        email: userPayload.email,
+        phone: userPayload.phone,
+        password: hashedPassword
+      })
       .execute();
 
     await Promise.all(
-      user.guests.map((guest) => this.guestsRepo.update(guest.id, guest))
+      userPayload.guests.map((guest) => this.guestsRepo.update({ id: guest.id }, {
+        firstname: guest.firstname || null,
+        lastname: guest.lastname || null,
+        birthyear: guest.birthyear || null,
+        reception: guest.reception,
+        dinner: guest.dinner,
+        foodAllergies: guest.foodAllergies || null,
+      }))
     );
 
-    return this.createTokens(user);
+    return this.createTokens(userPayload);
   }
 
-  async createTokens(user: Users) {
+  async createTokens(user: Users): Promise<AccessToken> {
     return {
       accessToken: await this.jwtService.signAsync(
         {
