@@ -20,6 +20,7 @@ import {
 import GuestForm from "@/components/register/guest-form";
 import UserForm from "@/components/register/user-form";
 import Resume from "@/components/register/resume";
+import GuestConfirmForm from "@/components/register/guest_confirm-form";
 
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
@@ -35,22 +36,14 @@ export default function RegisterPage({ userPayload }: any) {
     formState,
     getFieldState,
   } = useForm({
-    // reValidateMode: "onBlur",
     defaultValues: user,
     delayError: 1000,
     mode: "onChange",
   });
 
-  // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-  //   {
-  //     control, // control props comes from useForm (optional: if you are using FormContext)
-  //     name: "guests", // unique name for your Field Array
-
-  //   }
-  // );
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log(getValues())
   };
 
   const handleBack = () => {
@@ -71,7 +64,7 @@ export default function RegisterPage({ userPayload }: any) {
     },
     {
       label: "Informations personnelles",
-      description: getValues() ? (
+      description:
         <Box
           sx={{
             display: "flex",
@@ -83,7 +76,6 @@ export default function RegisterPage({ userPayload }: any) {
         >
           <UserForm control={control} user={user} />
         </Box>
-      ) : null,
     },
     {
       label: "Information sur les invités",
@@ -93,15 +85,12 @@ export default function RegisterPage({ userPayload }: any) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly",
-            // height: "100%",
             px: 3,
           }}
         >
           <GuestForm
             control={control}
             guests={user.guests}
-            register={register}
-            watch={watch}
           />
         </Box>
       ),
@@ -119,107 +108,49 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          {user.guests.map((guest: any) => (
-            <>
-              <Paper
-                elevation={3}
-                sx={{
-                  my: 1,
-                  p: 1,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignContent: "center",
-                  alignItems: "center",
-                }}
-                key={`${guest.id}_reception_box`}
-              >
-                <Typography key={guest.id + "bla"}>
-                  {guest.firstname} {guest.lastname}
-                </Typography>
-                <Switch
-                  key={guest.id + "_reception_switch"}
-                  defaultChecked={guest.reception}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser((user: any) => {
-                      user.guests = user.guests.map((userGuest: any) => {
-                        if (userGuest.id === guest.id) {
-                          return {
-                            ...userGuest,
-                            reception: event.target.checked,
-                          };
-                        }
-                        return userGuest;
-                      });
-                      return user;
-                    });
-                  }}
-                />
-              </Paper>
-            </>
-          ))}
+          <GuestConfirmForm control={control} guests={userPayload.guests} type={'reception'} />
         </Box>
       ),
     },
-    // ...(user.withDinner
-    //   ? [
-    //       {
-    //         label: "Présence au repas",
-    //         description: (
-    //           <Box
-    //             key={"receptionBox"}
-    //             sx={{
-    //               display: "flex",
-    //               flexDirection: "column",
-    //               justifyContent: "space-evenly",
-    //               // height: "100%",
-    //               px: 3,
-    //             }}
-    //           >
-    //             {user.guests.map((guest: any) => (
-    //               <Paper
-    //                 elevation={3}
-    //                 sx={{
-    //                   my: 1,
-    //                   p: 1,
-    //                   display: "flex",
-    //                   flexDirection: "row",
-    //                   justifyContent: "space-between",
-    //                   alignContent: "center",
-    //                   alignItems: "center",
-    //                 }}
-    //                 key={`${guest.id}_dinner_box`}
-    //               >
-    //                 <Typography key={guest.id + "hdqskjdh"}>
-    //                   {guest.firstname} {guest.lastname}
-    //                 </Typography>
-    //                 <Switch
-    //                   key={guest.id + "_dinner_switch"}
-    //                   defaultChecked={guest.dinner}
-    //                   onChange={(
-    //                     event: React.ChangeEvent<HTMLInputElement>
-    //                   ) => {
-    //                     setUser((user: any) => {
-    //                       user.guests = user.guests.map((userGuest: any) => {
-    //                         if (userGuest.id === guest.id) {
-    //                           return {
-    //                             ...userGuest,
-    //                             dinner: event.target.checked,
-    //                           };
-    //                         }
-    //                         return userGuest;
-    //                       });
-    //                       return user;
-    //                     });
-    //                   }}
-    //                 />
-    //               </Paper>
-    //             ))}
-    //           </Box>
-    //         ),
-    //       },
-    //     ]
-    //   : []),
+    ...(user.withDinner
+      ? [
+        {
+          label: "Présence au repas",
+          description: (
+            <Box
+              key={"receptionBox"}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                // height: "100%",
+                px: 3,
+              }}
+            >
+              Yoooo, tu veux manger avec nous ?
+            </Box>
+          ),
+        },
+        {
+          label: "Présence au repas",
+          description: (
+            <Box
+              key={"receptionBox"}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                // height: "100%",
+                px: 3,
+              }}
+            >
+              <GuestConfirmForm control={control} guests={userPayload.guests} type={'dinner'} />
+
+            </Box>
+          ),
+        },
+      ]
+      : []),
     {
       label: "Récapitulatif",
       description: (
@@ -284,11 +215,11 @@ export default function RegisterPage({ userPayload }: any) {
                   type="submit"
                   size="small"
                   variant="contained"
-                  // onClick={() => {
-                  //   console.log(user);
-                  //   handleSubmit(console.log);
-                  // }}
-                  // disabled={activeStep === maxSteps - 1}
+                // onClick={() => {
+                //   console.log(user);
+                //   handleSubmit(console.log);
+                // }}
+                // disabled={activeStep === maxSteps - 1}
                 >
                   Valider <CheckIcon fontSize="small" />
                 </Button>
@@ -296,12 +227,12 @@ export default function RegisterPage({ userPayload }: any) {
                 <Button
                   size="small"
                   disabled={
-                    activeStep === 1 &&(
-                    getFieldState("username")?.invalid ||
-                    getFieldState("password")?.invalid ||
-                    getFieldState("email")?.invalid ||
-                    getFieldState("phone")?.invalid ||
-                    getFieldState("password-verif")?.invalid
+                    activeStep === 1 && (
+                      getFieldState("username")?.invalid ||
+                      getFieldState("password")?.invalid ||
+                      getFieldState("email")?.invalid ||
+                      getFieldState("phone")?.invalid ||
+                      getFieldState("password-verif")?.invalid
                     )
                   }
                   onClick={() => {
