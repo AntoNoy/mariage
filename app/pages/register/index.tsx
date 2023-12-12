@@ -11,13 +11,43 @@ import { AppBar, Switch, TextField, Toolbar } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { registerUser, registerByUuid } from "@/services/auth";
 import { Guests, translateGuestType } from "@/services/api/guests";
-
+import {
+  Controller,
+  useFieldArray,
+  useForm,
+  useFormState,
+} from "react-hook-form";
+import GuestForm from "@/components/register/guest-form";
+import UserForm from "@/components/register/user-form";
+import Resume from "@/components/register/resume";
 
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
-
   const [user, setUser] = React.useState(userPayload);
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    watch,
+    getValues,
+    formState,
+    getFieldState,
+  } = useForm({
+    // reValidateMode: "onBlur",
+    defaultValues: user,
+    delayError: 1000,
+    mode: "onChange",
+  });
+
+  // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+  //   {
+  //     control, // control props comes from useForm (optional: if you are using FormContext)
+  //     name: "guests", // unique name for your Field Array
+
+  //   }
+  // );
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -26,15 +56,6 @@ export default function RegisterPage({ userPayload }: any) {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  React.useEffect(() => {
-    console.log("--user--", user);
-  }, [user]);
-
-  async function handleSubmit() {
-    console.log(user);
-    await registerUser(user);
-  }
 
   const steps = [
     {
@@ -49,8 +70,8 @@ export default function RegisterPage({ userPayload }: any) {
       ),
     },
     {
-      label: "Informations de connexion",
-      description: user ? (
+      label: "Informations personnelles",
+      description: getValues() ? (
         <Box
           sx={{
             display: "flex",
@@ -60,83 +81,7 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <Paper
-            elevation={3}
-            sx={{
-              p: 2,
-              my: 1,
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Informations personnels
-            </Typography>
-
-            <TextField
-              sx={{
-                my: 1,
-              }}
-              required
-              fullWidth
-              key={"user-username"}
-              label="Nom d'utilisateur"
-              defaultValue={user.username}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUser((user: any) => ({
-                  ...user,
-                  username: event.target.value,
-                }));
-              }}
-            />
-            <TextField
-              sx={{
-                my: 1,
-              }}
-              required
-              fullWidth
-              key={"user-email"}
-              label="E-mail"
-              defaultValue={user.email}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUser((user: any) => ({
-                  ...user,
-                  email: event.target.value,
-                }));
-              }}
-            />
-            <TextField
-              sx={{
-                my: 1,
-              }}
-              required
-              fullWidth
-              key={"user-phone"}
-              label="Téléphone"
-              defaultValue={user.phone}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUser((user: any) => ({
-                  ...user,
-                  phone: event.target.value,
-                }));
-              }}
-            />
-            <TextField
-              sx={{
-                my: 1,
-              }}
-              required
-              fullWidth
-              key={"user-password"}
-              label="Mot de passe"
-              defaultValue={user.password}
-              type="password"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUser((user: any) => ({
-                  ...user,
-                  password: event.target.value,
-                }));
-              }}
-            />
-          </Paper>
+          <UserForm control={control} user={user} />
         </Box>
       ) : null,
     },
@@ -152,92 +97,12 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          {user.guests.map((guest: Guests, index: number) => (
-            <Paper
-              elevation={3}
-              sx={{
-                p: 2,
-                my: 1,
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                {index + 1}/{user.guests.length}{" "}
-                {translateGuestType(guest.type)}
-              </Typography>
-              <TextField
-                sx={{
-                  my: 1,
-                }}
-                fullWidth
-                key={guest.id + "firstname"}
-                label="Prénom"
-                defaultValue={guest.firstname}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setUser((user: any) => {
-                    user.guests = user.guests.map((userGuest: Guests) => {
-                      if (userGuest.id === guest.id) {
-                        return {
-                          ...userGuest,
-                          firstname: event.target.value,
-                        };
-                      }
-                      return userGuest;
-                    });
-                    return user;
-                  });
-                }}
-              />
-              <TextField
-                sx={{
-                  my: 1,
-                }}
-                fullWidth
-                label="Nom de famille"
-                key={guest.id + "lastname"}
-                defaultValue={guest.lastname}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setUser((user: any) => {
-                    user.guests = user.guests.map((userGuest: Guests) => {
-                      if (userGuest.id === guest.id) {
-                        return {
-                          ...userGuest,
-                          lastname: event.target.value,
-                        };
-                      }
-                      return userGuest;
-                    });
-                    return user;
-                  });
-                }}
-              />
-              {guest.type === "child" && (
-                <TextField
-                  sx={{
-                    my: 2,
-                  }}
-                  fullWidth
-                  key={guest.id + "birthyear"}
-                  label="Année de naissance"
-                  type="number"
-                  defaultValue={guest.birthyear}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setUser((user: any) => {
-                      user.guests = user.guests.map((userGuest: Guests) => {
-                        if (userGuest.id === guest.id) {
-                          return {
-                            ...userGuest,
-                            birthyear: parseInt(event.target.value),
-                          };
-                        }
-                        return userGuest;
-                      });
-                      return user;
-                    });
-                  }}
-                />
-              )}
-            </Paper>
-          ))}
+          <GuestForm
+            control={control}
+            guests={user.guests}
+            register={register}
+            watch={watch}
+          />
         </Box>
       ),
     },
@@ -296,65 +161,65 @@ export default function RegisterPage({ userPayload }: any) {
         </Box>
       ),
     },
-    ...(user.withDinner
-      ? [
-          {
-            label: "Présence au repas",
-            description: (
-              <Box
-                key={"receptionBox"}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  // height: "100%",
-                  px: 3,
-                }}
-              >
-                {user.guests.map((guest: any) => (
-                  <Paper
-                    elevation={3}
-                    sx={{
-                      my: 1,
-                      p: 1,
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignContent: "center",
-                      alignItems: "center",
-                    }}
-                    key={`${guest.id}_dinner_box`}
-                  >
-                    <Typography key={guest.id + "hdqskjdh"}>
-                      {guest.firstname} {guest.lastname}
-                    </Typography>
-                    <Switch
-                      key={guest.id + "_dinner_switch"}
-                      defaultChecked={guest.dinner}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        setUser((user: any) => {
-                          user.guests = user.guests.map((userGuest: any) => {
-                            if (userGuest.id === guest.id) {
-                              return {
-                                ...userGuest,
-                                dinner: event.target.checked,
-                              };
-                            }
-                            return userGuest;
-                          });
-                          return user;
-                        });
-                      }}
-                    />
-                  </Paper>
-                ))}
-              </Box>
-            ),
-          },
-        ]
-      : []),
+    // ...(user.withDinner
+    //   ? [
+    //       {
+    //         label: "Présence au repas",
+    //         description: (
+    //           <Box
+    //             key={"receptionBox"}
+    //             sx={{
+    //               display: "flex",
+    //               flexDirection: "column",
+    //               justifyContent: "space-evenly",
+    //               // height: "100%",
+    //               px: 3,
+    //             }}
+    //           >
+    //             {user.guests.map((guest: any) => (
+    //               <Paper
+    //                 elevation={3}
+    //                 sx={{
+    //                   my: 1,
+    //                   p: 1,
+    //                   display: "flex",
+    //                   flexDirection: "row",
+    //                   justifyContent: "space-between",
+    //                   alignContent: "center",
+    //                   alignItems: "center",
+    //                 }}
+    //                 key={`${guest.id}_dinner_box`}
+    //               >
+    //                 <Typography key={guest.id + "hdqskjdh"}>
+    //                   {guest.firstname} {guest.lastname}
+    //                 </Typography>
+    //                 <Switch
+    //                   key={guest.id + "_dinner_switch"}
+    //                   defaultChecked={guest.dinner}
+    //                   onChange={(
+    //                     event: React.ChangeEvent<HTMLInputElement>
+    //                   ) => {
+    //                     setUser((user: any) => {
+    //                       user.guests = user.guests.map((userGuest: any) => {
+    //                         if (userGuest.id === guest.id) {
+    //                           return {
+    //                             ...userGuest,
+    //                             dinner: event.target.checked,
+    //                           };
+    //                         }
+    //                         return userGuest;
+    //                       });
+    //                       return user;
+    //                     });
+    //                   }}
+    //                 />
+    //               </Paper>
+    //             ))}
+    //           </Box>
+    //         ),
+    //       },
+    //     ]
+    //   : []),
     {
       label: "Récapitulatif",
       description: (
@@ -366,61 +231,7 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <Paper
-            elevation={3}
-            sx={{
-              p: 2,
-              my: 1,
-              bgcolor: "primary.main",
-              color: "primary.contrastText",
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Informations personnels
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Nom d'utilisateur: {user.username}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              E-mail: {user.email}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Téléphone: {user.phone}
-            </Typography>
-          </Paper>
-          {user.guests.map((guest: Guests, index: number) => (
-            <Paper
-              elevation={3}
-              sx={{
-                p: 2,
-                my: 1,
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                {index + 1}/{user.guests.length}{" "}
-                {translateGuestType(guest.type)}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Prénom: {guest.firstname}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Nom de famille: {guest.lastname}
-              </Typography>
-              {guest.type === "child" && (
-                <Typography variant="body1" gutterBottom>
-                  Année de naissance: {guest.birthyear}
-                </Typography>
-              )}
-              <Typography variant="body1" gutterBottom>
-                Vin d'honneur: {guest.reception ? "Oui" : "Non"}
-              </Typography>
-              {user.withDinner && (
-                <Typography variant="body1" gutterBottom>
-                  Repas: {guest.dinner ? "Oui" : "Non"}
-                </Typography>
-              )}
-            </Paper>
-          ))}
+          <Resume user={getValues()} />
         </Box>
       ),
     },
@@ -457,63 +268,74 @@ export default function RegisterPage({ userPayload }: any) {
       >
         {steps[activeStep].description}
       </Box>
-
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100 }}
-        elevation={3}
-      >
-        <MobileStepper
-          variant="dots"
-          steps={maxSteps}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            activeStep === maxSteps - 1 ? (
-              <Button
-                type="submit"
-                size="small"
-                variant="contained"
-                onClick={() => {
-                  console.log(user);
-                  handleSubmit();
-                }}
-                // disabled={activeStep === maxSteps - 1}
-              >
-                Valider <CheckIcon fontSize="small" />
-              </Button>
-            ) : (
-              <Button
-                size="small"
-                onClick={() => {
-                  handleNext();
-                }}
-              >
-                Suivant
-                {theme.direction === "rtl" ? (
-                  <KeyboardArrowLeft />
-                ) : (
-                  <KeyboardArrowRight />
-                )}
-              </Button>
-            )
-          }
-          backButton={
-            <Button
-              size="small"
-              onClick={handleBack}
-              disabled={activeStep === 0}
-            >
-              {theme.direction === "rtl" ? (
-                <KeyboardArrowRight />
+      <form onSubmit={handleSubmit(() => console.log(formState))}>
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100 }}
+          elevation={3}
+        >
+          <MobileStepper
+            variant="dots"
+            steps={maxSteps}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              activeStep === maxSteps - 1 ? (
+                <Button
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  // onClick={() => {
+                  //   console.log(user);
+                  //   handleSubmit(console.log);
+                  // }}
+                  // disabled={activeStep === maxSteps - 1}
+                >
+                  Valider <CheckIcon fontSize="small" />
+                </Button>
               ) : (
-                <KeyboardArrowLeft />
-              )}
-              Back
-            </Button>
-          }
-        />
-      </Paper>
-      {/* </form> */}
+                <Button
+                  size="small"
+                  disabled={
+                    activeStep === 1 &&(
+                    getFieldState("username")?.invalid ||
+                    getFieldState("password")?.invalid ||
+                    getFieldState("email")?.invalid ||
+                    getFieldState("phone")?.invalid ||
+                    getFieldState("password-verif")?.invalid
+                    )
+                  }
+                  onClick={() => {
+                    console.log(control.getFieldState("username"));
+                    console.log(formState.isValid);
+                    handleNext();
+                  }}
+                >
+                  Suivant
+                  {theme.direction === "rtl" ? (
+                    <KeyboardArrowLeft />
+                  ) : (
+                    <KeyboardArrowRight />
+                  )}
+                </Button>
+              )
+            }
+            backButton={
+              <Button
+                size="small"
+                onClick={handleBack}
+                disabled={activeStep === 0}
+              >
+                {theme.direction === "rtl" ? (
+                  <KeyboardArrowRight />
+                ) : (
+                  <KeyboardArrowLeft />
+                )}
+                Back
+              </Button>
+            }
+          />
+        </Paper>
+      </form>
     </>
   );
 }
