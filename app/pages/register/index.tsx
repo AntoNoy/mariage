@@ -24,7 +24,7 @@ import GuestConfirmForm from "@/components/register/guest_confirm-form";
 
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
+
   const [user, setUser] = React.useState(userPayload);
 
   const {
@@ -33,22 +33,30 @@ export default function RegisterPage({ userPayload }: any) {
     register,
     watch,
     getValues,
+    trigger,
     formState,
+    setFocus,
     getFieldState,
   } = useForm({
     defaultValues: user,
     delayError: 1000,
-    mode: "onChange",
+    mode: "all",
+    criteriaMode: "firstError"
   });
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    console.log(getValues())
-  };
+  const {
+    dirtyFields,
+    errors,
+    isValid,
+    touchedFields,
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  } = useFormState({
+    control
+  });
+
+  React.useEffect(() => {
+
+  }, [errors])
 
   const steps = [
     {
@@ -61,10 +69,11 @@ export default function RegisterPage({ userPayload }: any) {
           src="https://loverings.be/wp-content/uploads/2022/02/alliance-mariage-offerte.jpg"
         />
       ),
+      validation: () => true
     },
     {
       label: "Informations personnelles",
-      description:
+      description: (
         <Box
           sx={{
             display: "flex",
@@ -76,6 +85,20 @@ export default function RegisterPage({ userPayload }: any) {
         >
           <UserForm control={control} user={user} />
         </Box>
+      ),
+      validation: async () => 
+      await trigger(['phone', 'email'])
+//       {
+//         console.log('validation', steps[activeStep].label, isValid, dirtyFields, errors, touchedFields)
+// console.log(await trigger("username"))
+//         const aa = await trigger('phone')
+//         console.log("aa", aa)
+//         console.log('validationaa', steps[activeStep].label, isValid, dirtyFields, errors, touchedFields)
+//         // setFocus('phone')
+
+//         const password = control.getFieldState('password')
+//         console.log('password', password)
+//       }
     },
     {
       label: "Information sur les invités",
@@ -94,6 +117,8 @@ export default function RegisterPage({ userPayload }: any) {
           />
         </Box>
       ),
+      validation: () => true
+
     },
     {
       label: "Présence au vin d'honneur",
@@ -111,26 +136,31 @@ export default function RegisterPage({ userPayload }: any) {
           <GuestConfirmForm control={control} guests={userPayload.guests} type={'reception'} />
         </Box>
       ),
+      validation: () => true
+
     },
     ...(user.withDinner
       ? [
-        {
-          label: "Présence au repas",
-          description: (
-            <Box
-              key={"receptionBox"}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                // height: "100%",
-                px: 3,
-              }}
-            >
-              Yoooo, tu veux manger avec nous ?
-            </Box>
-          ),
-        },
+        // {
+        //   label: "Présence au repas",
+        //   description: (
+        //     <Box
+        //       key={"receptionBox"}
+        //       sx={{
+        //         display: "flex",
+        //         flexDirection: "column",
+        //         justifyContent: "space-evenly",
+        //         // height: "100%",
+        //         px: 3,
+        //       }}
+        //     >
+        //       Yoooo, tu veux manger avec nous ?
+        //     </Box>
+        //   ),
+        // validation: () => {
+        //   console.log('validation', steps[activeStep].label)
+        // }
+        // },
         {
           label: "Présence au repas",
           description: (
@@ -148,6 +178,8 @@ export default function RegisterPage({ userPayload }: any) {
 
             </Box>
           ),
+          validation: () => true
+
         },
       ]
       : []),
@@ -165,8 +197,24 @@ export default function RegisterPage({ userPayload }: any) {
           <Resume user={getValues()} />
         </Box>
       ),
+      validation: () => true
+
     },
   ];
+
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = async () => {
+    const isValid = await steps[activeStep].validation()
+    if(isValid)setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log(getValues())
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+
 
   const maxSteps = steps.length;
 
@@ -226,18 +274,23 @@ export default function RegisterPage({ userPayload }: any) {
               ) : (
                 <Button
                   size="small"
-                  disabled={
-                    activeStep === 1 && (
-                      getFieldState("username")?.invalid ||
-                      getFieldState("password")?.invalid ||
-                      getFieldState("email")?.invalid ||
-                      getFieldState("phone")?.invalid ||
-                      getFieldState("password-verif")?.invalid
-                    )
-                  }
+                  // disabled={
+                  //   activeStep === 1 && (
+                  //     getFieldState("username")?.invalid ||
+                  //     getFieldState("password")?.invalid ||
+                  //     getFieldState("email")?.invalid ||
+                  //     getFieldState("phone")?.invalid ||
+                  //     getFieldState("password-verif")?.invalid
+                  //   )
+                  // }
                   onClick={() => {
                     console.log(control.getFieldState("username"));
                     console.log(formState.isValid);
+
+
+
+
+
                     handleNext();
                   }}
                 >
