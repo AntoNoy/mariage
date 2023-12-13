@@ -22,7 +22,7 @@ export default function Resume({user}: ResumeProps) {
           Informations personnels
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Nom d'utilisateur: {user.username}
+          {"Nom d'utilisateur:"} {user.username}
         </Typography>
         <Typography variant="body1" gutterBottom>
           E-mail: {user.email}
@@ -33,6 +33,7 @@ export default function Resume({user}: ResumeProps) {
       </Paper>
       {user.guests.map((guest: Guests, index: number) => (
         <Paper
+          key={"Guest_" + guest.id}
           elevation={3}
           sx={{
             p: 2,
@@ -54,7 +55,7 @@ export default function Resume({user}: ResumeProps) {
             </Typography>
           )}
           <Typography variant="body1" gutterBottom>
-            Vin d'honneur: {guest.reception ? "Oui" : "Non"}
+            {"Vin d'honneur:"} {guest.reception ? "Oui" : "Non"}
           </Typography>
           {user.withDinner && (
             <Typography variant="body1" gutterBottom>
