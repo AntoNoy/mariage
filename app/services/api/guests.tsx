@@ -32,69 +32,12 @@ const axiosInstance = axios.create({
 
 
 export function getGestsApi(){
-    if(process.env.NEXT_PUBLIC_API_URL === ''){
-        return new Promise<Guests[]>((resolve) => {
-            resolve(mockData);
-        })
-    }
     return axiosInstance.get('/users/:id/guests').then(res => res.data);
 }
 
 export function setGestsApi(payload: Guests[]):Promise<Guests[]>{
-    if(process.env.NEXT_PUBLIC_API_URL === undefined){
-        return new Promise<Guests[]>((resolve) => {
-            resolve(mockData);
-        })
-    }
     return axiosInstance.post<Guests[]>('/users/:id/guests').then(res => res.data);
 }
 
 
-let mockData: Guests[] = [
-    {
-        id: 1,
-        firstname: 'John',
-        lastname: 'Doe',
-        type: TypeGuest.ADULT,
-        birthyear: null,
-        wineReception: null,
-        dinner: null,
-    },
-    {
-        id: 2,
-        firstname: 'Jane',
-        lastname: 'Doe',
-        type: TypeGuest.ADULT,
-        birthyear: null,
-        wineReception: null,
-        dinner: null,
-    },
-    {
-        id: 3,
-        firstname: 'Richard',
-        lastname: 'Doe',
-        type: TypeGuest.CHILD,
-        birthyear: null,
-        wineReception: null,
-        dinner: null,
-    },
-    {
-        id: 4,
-        firstname: 'Ember',
-        lastname: 'Doe',
-        type: TypeGuest.CHILD,
-        birthyear: null,
-        wineReception: null,
-        dinner: null,
-    },
-    {
-        id: 5,
-        firstname: 'Baby',
-        lastname: 'Doe',
-        type: TypeGuest.BABY,
-        birthyear: null,
-        wineReception: null,
-        dinner: null,
-    }
-];
 

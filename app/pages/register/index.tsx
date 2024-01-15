@@ -87,18 +87,7 @@ export default function RegisterPage({ userPayload }: any) {
         </Box>
       ),
       validation: async () => 
-      await trigger(['phone', 'email'])
-//       {
-//         console.log('validation', steps[activeStep].label, isValid, dirtyFields, errors, touchedFields)
-// console.log(await trigger("username"))
-//         const aa = await trigger('phone')
-//         console.log("aa", aa)
-//         console.log('validationaa', steps[activeStep].label, isValid, dirtyFields, errors, touchedFields)
-//         // setFocus('phone')
-
-//         const password = control.getFieldState('password')
-//         console.log('password', password)
-//       }
+      await trigger(['phone', 'email', 'password', 'password-verif'])
     },
     {
       label: "Information sur les invités",
@@ -117,7 +106,8 @@ export default function RegisterPage({ userPayload }: any) {
           />
         </Box>
       ),
-      validation: () => true
+      validation: async () => 
+      await trigger(['guests'])
 
     },
     {
@@ -141,31 +131,11 @@ export default function RegisterPage({ userPayload }: any) {
     },
     ...(user.withDinner
       ? [
-        // {
-        //   label: "Présence au repas",
-        //   description: (
-        //     <Box
-        //       key={"receptionBox"}
-        //       sx={{
-        //         display: "flex",
-        //         flexDirection: "column",
-        //         justifyContent: "space-evenly",
-        //         // height: "100%",
-        //         px: 3,
-        //       }}
-        //     >
-        //       Yoooo, tu veux manger avec nous ?
-        //     </Box>
-        //   ),
-        // validation: () => {
-        //   console.log('validation', steps[activeStep].label)
-        // }
-        // },
         {
           label: "Présence au repas",
           description: (
             <Box
-              key={"receptionBox"}
+              key={"dinnerBox"}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -274,23 +244,9 @@ export default function RegisterPage({ userPayload }: any) {
               ) : (
                 <Button
                   size="small"
-                  // disabled={
-                  //   activeStep === 1 && (
-                  //     getFieldState("username")?.invalid ||
-                  //     getFieldState("password")?.invalid ||
-                  //     getFieldState("email")?.invalid ||
-                  //     getFieldState("phone")?.invalid ||
-                  //     getFieldState("password-verif")?.invalid
-                  //   )
-                  // }
                   onClick={() => {
                     console.log(control.getFieldState("username"));
                     console.log(formState.isValid);
-
-
-
-
-
                     handleNext();
                   }}
                 >

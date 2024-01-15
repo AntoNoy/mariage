@@ -29,7 +29,7 @@ export default function GuestForm(props: GuestFormProps) {
         }}
       >
         <Typography variant="h6" gutterBottom>
-          {index + 1}/{props.guests.length}
+          {index + 1}/{props.guests.length}{" "}
           {translateGuestType(guest.type)}
         </Typography>
 
@@ -85,7 +85,7 @@ export default function GuestForm(props: GuestFormProps) {
                 const intValue = parseInt(value);
                 console.log(formValues.guests[index].type, intValue);
                 if (guest.type !== "child") return true;
-                if (intValue < 2025 || intValue > 1980)
+                if (intValue > 2025 || intValue < 1980)
                   return "L'année de naissance doit raisonable";
               },
             }}
