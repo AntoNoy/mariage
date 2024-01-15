@@ -51,13 +51,24 @@ export default function HomePage() {
         subTitle="A partir de 19h"
         image="https://fredeville-traiteur.fr/wp-content/uploads/2023/01/8-fredeville-traiteur-tours-repas-mariage-diner-haut-de-gamme.jpg"
         bottomAction={
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={()=>router.push("/home/festive-meal")}
-          >
-            En savoir plus
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => router.push("/home/festive-meal")}
+            >
+              En savoir plus
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              target="_blank"
+              href="https://www.google.com/maps/place/Malibu,+Californie,+%C3%89tats-Unis/@34.0334572,-119.0660263,11z/data=!3m1!4b1!4m6!3m5!1s0x80e81da9f908d63f:0x93b72d71b2ea8c5a!8m2!3d34.0380585!4d-118.6923438!16zL20vMHIwbTY?entry=ttu"
+            >
+              Lien map
+            </Button>
+          </>
         }
       >
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ab
