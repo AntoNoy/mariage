@@ -7,13 +7,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { AppBar, Switch, TextField, Toolbar } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import { registerUser, registerByUuid } from "@/services/auth";
-import { Guests, translateGuestType } from "@/services/api/guests";
+import { registerByUuid } from "@/services/auth";
 import {
-  Controller,
-  useFieldArray,
   useForm,
   useFormState,
 } from "react-hook-form";
@@ -25,38 +22,20 @@ import GuestConfirmForm from "@/components/register/guest_confirm-form";
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
 
-  const [user, setUser] = React.useState(userPayload);
-
-  const {
-    control,
-    handleSubmit,
-    register,
-    watch,
-    getValues,
-    trigger,
-    formState,
-    setFocus,
-    getFieldState,
-  } = useForm({
-    defaultValues: user,
+  const { control, handleSubmit, getValues, trigger, formState, setValue} = useForm({
+    defaultValues: userPayload,
     delayError: 1000,
     mode: "all",
-    criteriaMode: "firstError"
+    criteriaMode: "firstError",
   });
 
-  const {
-    dirtyFields,
-    errors,
-    isValid,
-    touchedFields,
-
-  } = useFormState({
-    control
+  const { errors } = useFormState({
+    control,
   });
 
   React.useEffect(() => {
-
-  }, [errors])
+    console.log('useEffect errors', errors)
+  }, [errors]);
 
   const steps = [
     {
@@ -69,7 +48,7 @@ export default function RegisterPage({ userPayload }: any) {
           src="https://loverings.be/wp-content/uploads/2022/02/alliance-mariage-offerte.jpg"
         />
       ),
-      validation: () => true
+      validation: () => true,
     },
     {
       label: "Informations personnelles",
@@ -83,11 +62,15 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <UserForm control={control} user={user} />
+          <UserForm control={control} setValue={setValue} />
         </Box>
       ),
-      validation: async () => 
-      await trigger(['phone', 'email', 'password', 'password-verif'])
+      validation: async () => {
+        if (!getValues().password || !getValues().password.length) {
+          return trigger(["phone", "email"]);
+        }
+        return trigger(["phone", "email", "password", "password-verif"]);
+      },
     },
     {
       label: "Information sur les invités",
@@ -100,15 +83,10 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <GuestForm
-            control={control}
-            guests={user.guests}
-          />
+          <GuestForm control={control} guests={userPayload.guests} />
         </Box>
       ),
-      validation: async () => 
-      await trigger(['guests'])
-
+      validation: async () => await trigger(["guests"]),
     },
     {
       label: "Présence au vin d'honneur",
@@ -123,35 +101,40 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <GuestConfirmForm control={control} guests={userPayload.guests} type={'reception'} />
+          <GuestConfirmForm
+            control={control}
+            guests={userPayload.guests}
+            type={"reception"}
+          />
         </Box>
       ),
-      validation: () => true
-
+      validation: () => true,
     },
-    ...(user.withDinner
+    ...(userPayload.withDinner
       ? [
-        {
-          label: "Présence au repas",
-          description: (
-            <Box
-              key={"dinnerBox"}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                // height: "100%",
-                px: 3,
-              }}
-            >
-              <GuestConfirmForm control={control} guests={userPayload.guests} type={'dinner'} />
-
-            </Box>
-          ),
-          validation: () => true
-
-        },
-      ]
+          {
+            label: "Présence au repas",
+            description: (
+              <Box
+                key={"dinnerBox"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  // height: "100%",
+                  px: 3,
+                }}
+              >
+                <GuestConfirmForm
+                  control={control}
+                  guests={userPayload.guests}
+                  type={"dinner"}
+                />
+              </Box>
+            ),
+            validation: () => true,
+          },
+        ]
       : []),
     {
       label: "Récapitulatif",
@@ -167,24 +150,21 @@ export default function RegisterPage({ userPayload }: any) {
           <Resume user={getValues()} />
         </Box>
       ),
-      validation: () => true
-
+      validation: () => true,
     },
   ];
 
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = async () => {
-    const isValid = await steps[activeStep].validation()
-    if(isValid)setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    console.log(getValues())
+    const isValid = await steps[activeStep].validation();
+    if (isValid) setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log(getValues());
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-
 
   const maxSteps = steps.length;
 
@@ -217,7 +197,7 @@ export default function RegisterPage({ userPayload }: any) {
       >
         {steps[activeStep].description}
       </Box>
-      <form onSubmit={handleSubmit(() => console.log(formState))}>
+      <form onSubmit={undefined}>
         <Paper
           sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100 }}
           elevation={3}
@@ -228,16 +208,12 @@ export default function RegisterPage({ userPayload }: any) {
             position="static"
             activeStep={activeStep}
             nextButton={
-              activeStep === maxSteps - 1 ? (
+              activeStep === maxSteps -1  ? (
                 <Button
-                  type="submit"
+                  type="button"
                   size="small"
                   variant="contained"
-                // onClick={() => {
-                //   console.log(user);
-                //   handleSubmit(console.log);
-                // }}
-                // disabled={activeStep === maxSteps - 1}
+                  onClick={handleSubmit(() => console.log('formState final', formState.defaultValues))}
                 >
                   Valider <CheckIcon fontSize="small" />
                 </Button>

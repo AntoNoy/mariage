@@ -86,7 +86,7 @@ export default function GuestForm(props: GuestFormProps) {
                 console.log(formValues.guests[index].type, intValue);
                 if (guest.type !== "child") return true;
                 if (intValue > 2025 || intValue < 1980)
-                  return "L'année de naissance doit raisonable";
+                  return "L'année de naissance doit être raisonable";
               },
             }}
             render={({ field: newField, fieldState: { error } }) => (

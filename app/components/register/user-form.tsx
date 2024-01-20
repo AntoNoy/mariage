@@ -1,12 +1,23 @@
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Paper, TextField, Typography } from "@mui/material";
+import { use, useEffect, useState } from "react";
 import { Control, Controller, FieldValues } from "react-hook-form";
 
 export interface UserFormProps {
   control: Control<FieldValues, any>;
-  user: any;
+  setValue: any;
 }
 
-export default function UserForm({ control, user }: UserFormProps) {
+export default function UserForm({
+  control,
+  setValue,
+}: UserFormProps) {
+  const [displayPwd, setDisplayPwd] = useState(false);
+
+  useEffect(() => {
+    setValue("password", "");
+  }, [displayPwd]);
+
   return (
     <>
       <Paper
@@ -19,7 +30,6 @@ export default function UserForm({ control, user }: UserFormProps) {
         <Typography variant="h6" gutterBottom>
           Informations de connexion
         </Typography>
-
         <Controller
           name="username"
           disabled
@@ -38,57 +48,78 @@ export default function UserForm({ control, user }: UserFormProps) {
           )}
         />
 
-        <Controller
-          name="password"
-          control={control}
-          defaultValue={""}
-          rules={{
-            required: "Obligatoire",
-            pattern: {
-              value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-              message: "Doit contenir 8 caractère 1 maj 1 min et 1 chiffre",
-            },
-          }}
-          render={({ field, fieldState: { error } }) => (
-            <TextField
-              {...field}
-              required
-              type="password"
-              error={error !== undefined}
-              label="Mot de passe"
-              helperText={error?.message}
-              sx={{
-                my: 1,
-                width: "100%",
-              }}
-            />
+        <div onClick={() => setDisplayPwd((oldValue) => !oldValue)}>
+          {displayPwd ? (
+            <Typography variant="subtitle2" gutterBottom>
+              <KeyboardArrowUp />
+              Cliquez ici pour ne pas modifier le mot de passe
+            </Typography>
+          ) : (
+            <Typography variant="subtitle2" gutterBottom>
+              <KeyboardArrowDown />
+              Votre mot de passe par default est 2025, si vous souhaitez le
+              modifier, cliquez ici
+
+            </Typography>
           )}
-        />
-        <Controller
-          name="password-verif"
-          control={control}
-          defaultValue={""}
-          rules={{
-            required: true,
-            validate: (value, formValues) => {
-              return value === formValues.password || "ne correspond pas";
-            },
-          }}
-          render={({ field, fieldState: { error } }) => (
-            <TextField
-              {...field}
-              required
-              type="password"
-              error={error !== undefined}
-              label="Vérification du mot de passe"
-              helperText={error?.message}
-              sx={{
-                my: 1,
-                width: "100%",
+        </div>
+        {displayPwd ? (
+          <>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue={""}
+              rules={{
+                required: "Obligatoire",
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                  message: "Doit contenir 8 caractère 1 maj 1 min et 1 chiffre",
+                },
               }}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  type="password"
+                  required
+                  error={error !== undefined}
+                  label="Mot de passe"
+                  helperText={error?.message}
+                  sx={{
+                    my: 1,
+                    width: "100%",
+                  }}
+                />
+              )}
             />
-          )}
-        />
+            <Controller
+              name="password-verif"
+              control={control}
+              defaultValue={""}
+              rules={{
+                required: true,
+                validate: (value, formValues) => {
+                  return value === formValues.password || "ne correspond pas";
+                },
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  type="password"
+                  required
+                  error={error !== undefined}
+                  label="Vérification du mot de passe"
+                  helperText={error?.message}
+                  sx={{
+                    my: 1,
+                    width: "100%",
+                  }}
+                />
+              )}
+            />
+          </>
+        ) : (
+          <></>
+        )}
       </Paper>
       <Paper
         elevation={3}
