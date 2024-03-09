@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -16,7 +17,13 @@
   }
 } */
 
+
 body {
+scrollbar-color: #C2604090 rgba(0, 0, 0, 0); 
+
+scroll-margin: 100px;
+
+
   /* height: 100%; */
   /* color: rgb(var(--foreground-rgb));
   background: linear-gradient(

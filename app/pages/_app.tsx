@@ -37,7 +37,17 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ThemeRegistry>
-        <AppBar position="sticky">
+      <Box alignItems={"center"} flexDirection={"column"} display={"flex"} sx={
+        {top: 0, left: 0, right: 0, bottom: 0, position: "fixed", overflow: "none", width: "100%"}
+      }>
+
+
+        <AppBar 
+        // position="sticky"
+         position="relative"
+      
+         sx={{ flexGrow: 1 }}
+        >
           <Toolbar>
             <Typography
               variant="h6"
@@ -57,16 +67,21 @@ export default function App({ Component, pageProps }: AppProps) {
             flexGrow: 1,
             bgcolor: "background.primary",
             overflow: "auto",
-            p: 3,
-            pb: 7,
+            p: 2,
+            width: "100%",
+            // pt:7,
+            // pb: 7,
           }}
         >
           <Component {...pageProps} />
         </Box>
+
         <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          sx={{ 
+            position: "relative", width: "100%",
+          }}
           elevation={3}
-        >
+          >
           <BottomNavigation
             showLabels
             value={pathname}
@@ -74,29 +89,30 @@ export default function App({ Component, pageProps }: AppProps) {
               setPathname(newValue);
               router.push(newValue);
             }}
-          >
+            >
             <BottomNavigationAction
               label="Accueil"
               value={"/home"}
               icon={<HomeIcon />}
-            />
+              />
             <BottomNavigationAction
               label="Informations"
               value={"/home/informations"}
               icon={<InfoIcon />}
-            />
+              />
             <BottomNavigationAction
               label="Repas"
               value={"/home/festive-meal"}
               icon={<RestaurantIcon />}
-            />
+              />
             <BottomNavigationAction
               label="Invités"
               value={"/home/guests"}
               icon={<PeopleIcon />}
-            />
+              />
           </BottomNavigation>
         </Paper>
+              </Box>
       </ThemeRegistry>
     </>
   );
