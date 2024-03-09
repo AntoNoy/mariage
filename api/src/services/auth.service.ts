@@ -116,4 +116,27 @@ export class AuthService {
       ),
     };
   }
+
+  async login({ username, password}: { username: string, password: string }){
+   const user = await this.daoService.getRepository(Users).findOne({ where: { username } });
+
+    if (!user) {
+      throw new NotFoundException("Utilisateur introuvable");
+    }
+
+    const isValidPassword = await argon2.verify(user.password, password);
+    if (!isValidPassword) {
+      throw new BadRequestException("Mot de passe incorrect");
+    }
+
+    return this.createTokens(user);
+  }
+
+  async loginWithUuid(uuid: string) {
+    const user = await this.daoService.getRepository(Users).findOne({ where: { uuid } });
+    if (!user) {
+      throw new NotFoundException("Utilisateur introuvable");
+    }
+    return this.createTokens(user);
+  }
 }

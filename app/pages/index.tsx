@@ -1,8 +1,9 @@
 import { Box, CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Context, useEffect } from "react";
-import { parseCookies } from "nookies";
+import { useEffect } from "react";
+import { parseCookies, setCookie } from "nookies";
 import { NextPageContext } from "next";
+import { login } from "@/services/auth";
 
 export default function Root() {
   const router = useRouter();
@@ -36,9 +37,23 @@ export async function getServerSideProps(context: NextPageContext) {
       },
     };
   } else {
+    if (context?.query?.uuid) {
+      const { accessToken } = await login({
+        uuid: context.query.uuid as string,
+      });
+
+      setCookie(context, "token", accessToken)
+      return {
+        redirect: {
+          destination: "/home",
+          permanent: false,
+        },
+      };
+    }
+
     return {
       redirect: {
-        destination: "/login",
+        destination: "/login" + context.query.uuid,
         permanent: false,
       },
     };
