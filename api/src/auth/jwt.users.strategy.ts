@@ -24,7 +24,7 @@ export class JwtUsersStrategy extends PassportStrategy(Strategy, 'jwtUsers') {
     const user = await this.entitiesService.getRepository('Users').findOne({ where: { id: payload.userId } })
     if (!user) return undefined;
 
-    const userPayload = { id: user.id, email: user.email, roles: user.roles };
+    const userPayload = { id: user.id, email: user.email, role: user.role };
     console.log('userInRequest', userPayload)
     return userPayload;
   }

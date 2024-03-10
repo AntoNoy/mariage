@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Guests } from "./guests";
-import { Roles } from "../definitions";
+import { RolesEnum } from "../definitions";
 
 @Entity("users")
 export class Users {
@@ -31,8 +31,8 @@ export class Users {
   @Column({ name: "password", type: "varchar", length: 255, nullable: true })
   password: string;
 
-  @Column({ name: "role", type: "enum", enum: Roles, default: Roles.GUEST })
-  role: Roles;
+  @Column({ name: "role", type: "enum", enum: RolesEnum, default: RolesEnum.GUEST })
+  role: RolesEnum;
 
   @Column({ type: "boolean", name: "with_dinner", default: false })
   withDinner: boolean;

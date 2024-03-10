@@ -11,7 +11,7 @@ export type GuestCreate = Partial<Guests> & {
   withDinner: boolean;
 };
 
-export enum Roles {
+export enum RolesEnum {
   ADMIN = "admin",
   GUEST = "guest",
 }
