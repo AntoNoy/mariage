@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { Users } from "src/entities/schemas/users";
-import { AuthService } from "src/services/auth.service";
-import { Login, LoginWithUuid } from "./definitions";
+import { AuthService } from "src/auth/auth.service";
+import { Login, LoginWithUuid } from "../definitions";
+import { Public } from "src/auth/public.decorator";
 
+@Public()
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

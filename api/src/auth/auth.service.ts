@@ -9,7 +9,7 @@ import { Users } from "src/entities/schemas/users";
 import { ConfigService } from "@nestjs/config";
 import { omit } from "lodash";
 import { Guests } from "src/entities/schemas/guests";
-import { AccessToken } from "./auth.definitions";
+import { AccessToken } from "../services/auth.definitions";
 import * as argon2 from "argon2";
 
 @Injectable()
