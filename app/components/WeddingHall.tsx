@@ -8,10 +8,6 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { red } from "@mui/material/colors";
 import theme from "../ThemeRegistry/theme";
 
 export default function WeddingCardComponent({

@@ -53,7 +53,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
     return {
       redirect: {
-        destination: "/login" + context.query.uuid,
+        destination: "/login",
         permanent: false,
       },
     };

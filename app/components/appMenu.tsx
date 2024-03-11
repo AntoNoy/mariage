@@ -83,6 +83,11 @@ export default function AppMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <MenuItem onClick={() => {
+          router.push("/admin");
+        }}>
+          <Avatar /> Admin
+        </MenuItem>
 
         <MenuItem onClick={handleClose}>
           <Avatar /> Mon compte
