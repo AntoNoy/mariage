@@ -16,6 +16,12 @@ export enum TypeGuest {
   BABY = "baby",
 }
 
+export enum MenuEnum{
+  POISSON= "poisson",
+  VIANDE= "viande",
+  ENFANT= "enfant"
+}
+
 @Index("UX_firstname_lastname", ["firstname", "lastname"], { unique: true })
 @Entity("guests")
 export class Guests {
@@ -52,6 +58,12 @@ export class Guests {
     nullable: true,
   })
   foodAllergies: string[];
+
+  @Column('enum', {
+    enum: MenuEnum,
+    nullable: true
+  })
+  menu: MenuEnum
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   created_at: Date;

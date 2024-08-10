@@ -21,6 +21,7 @@ export default function AdminPage() {
             foodAllergies: guest.foodAllergies,
             birthyear: guest.birthyear,
             type: guest.type,
+            menu: guest.menu
           };
         });
       }));
@@ -65,6 +66,10 @@ export default function AdminPage() {
     {
       field: "birthyear",
       headerName: "Année de naissance",
+    },
+    {
+      field: "menu",
+      headerName: "Menu",
     },
   ];
 

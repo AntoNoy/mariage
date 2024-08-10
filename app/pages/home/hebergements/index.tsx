@@ -4,7 +4,7 @@ export default function InformationPage() {
   return (<>
     <Box alignItems={"center"} flexDirection={"column"} display={"flex"}>
 
-      <Typography variant="h3">
+      {/* <Typography variant="h3">
         Comment venir ?
       </Typography>
       <Box alignItems={"center"} flexDirection={"row"} display={"flex"} flexWrap={"wrap"}>
@@ -90,9 +90,48 @@ export default function InformationPage() {
             ></iframe>
           </CardContent>
         </Card>
+      </Box> */}
+       <Typography variant="h3" mt={"15px"}>
+        Sur place
+      </Typography>
+      <Box alignItems={"center"} flexDirection={"row"} display={"flex"} flexWrap={"wrap"}>
+
+      <Card sx={{
+          flex: "1 0 21%",
+          margin: "5px",
+          minWidth: "300px"
+        }}>
+          <CardHeader
+            // avatar={
+            // initiales ? (
+            //   <Avatar
+            //     sx={{ bgcolor: theme.palette.primary.main }}
+            //     aria-label="recipe"
+            //   >
+            //     {initiales}
+            //   </Avatar>
+            // ) : null
+            // }
+            // action={headerAction}
+            title={"Camping"}
+          // subheader={""}
+          />
+          <CardContent>
+            <Typography variant="body2" color="text.primary" fontSize={14}>
+              <p>
+                Un camping est à votre disposition sur le lieu du mariage.
+                Le tarif est de 8€ par personne (Serviète de bain fournis).
+              </p>
+
+            </Typography>
+          </CardContent>
+        </Card>
+       
+
+
       </Box>
       <Typography variant="h3" mt={"15px"}>
-        Les logements
+        Aux alentours
       </Typography>
       <Box alignItems={"center"} flexDirection={"row"} display={"flex"} flexWrap={"wrap"}>
 
@@ -114,38 +153,6 @@ export default function InformationPage() {
             // }
             // action={headerAction}
             title={"Les logements"}
-          // subheader={""}
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.primary" fontSize={14}>
-              <p>
-                Addresse:
-              </p>
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam, dolorem. Doloribus fugiat sunt porro, iusto molestiae cupiditate ullam optio possimus totam culpa fuga eaque quisquam ad illum veritatis odio fugit?
-              </p>
-
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card sx={{
-          flex: "1 0 21%",
-          margin: "5px",
-          minWidth: "300px"
-        }}>
-          <CardHeader
-            // avatar={
-            // initiales ? (
-            //   <Avatar
-            //     sx={{ bgcolor: theme.palette.primary.main }}
-            //     aria-label="recipe"
-            //   >
-            //     {initiales}
-            //   </Avatar>
-            // ) : null
-            // }
-            // action={headerAction}
-            title={"la Mairie"}
           // subheader={""}
           />
           <CardContent>

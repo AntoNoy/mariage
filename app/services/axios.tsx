@@ -11,11 +11,11 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((request) => {
-  const { token } = parseCookies();
+  let { token } = parseCookies();
   console.log("token", token);
   request.headers["Content-Type"] = "application/json";
   request.headers["Access-Control-Allow-Origin"] = "*";
-  if (token) {
+  if (token && !request.headers["Authorization"]) {
     request.headers["Authorization"] = `Bearer ${getToken()}`;
   }
   console.log("request.headers", request.headers);

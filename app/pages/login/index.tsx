@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 import theme from '@/ThemeRegistry/theme';
+import { jwtDecode } from 'jwt-decode';
+import { login } from '@/services/auth';
 
 function Copyright(props: any) {
   return (
@@ -47,15 +49,20 @@ export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    setCookie(null, "token", `token-${data.get('email')}`, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: "/",
-    });
-    router.push("/home");
+    console.log();
+    const username = data.get('email')?.toString()
+    const password = data.get('password')?.toString()
+
+    if(!username || ! password){
+      return 'error'
+    }
+    login({
+      username,
+      password,
+    }).then(res=>{
+      router.push("/home");
+    })
+   
   };
 
   return (

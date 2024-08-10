@@ -14,6 +14,7 @@ import AppMenu from "@/components/appMenu";
 import { useRouter } from "next/router";
 import InfoIcon from "@mui/icons-material/Info";
 import HomeIcon from "@mui/icons-material/Home";
+import CameraIcon from "@mui/icons-material/Camera";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import PeopleIcon from "@mui/icons-material/People";
 import { use, useEffect, useState } from "react";
@@ -60,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
             flexGrow: 1,
             bgcolor: "background.primary",
             overflow: "auto",
-            p: 2,
+            p: pathname.includes('guests')?0:2,
             width: "100%",
             // pt:7,
             // pb: 7,
@@ -88,21 +89,22 @@ export default function App({ Component, pageProps }: AppProps) {
               value={"/home"}
               icon={<HomeIcon />}
               />
-            <BottomNavigationAction
-              label="Informations"
-              value={"/home/informations"}
-              icon={<InfoIcon />}
-              />
-            <BottomNavigationAction
-              label="Repas"
-              value={"/home/festive-meal"}
-              icon={<RestaurantIcon />}
-              />
-            <BottomNavigationAction
-              label="Invités"
+              <BottomNavigationAction
+              label="Réponse"
               value={"/home/guests"}
               icon={<PeopleIcon />}
               />
+            <BottomNavigationAction
+              label="Hébergements"
+              value={"/home/hebergements"}
+              icon={<InfoIcon />}
+              />
+            <BottomNavigationAction
+              label="Photos"
+              value={"/home/galerie"}
+              icon={<CameraIcon />}
+              />
+            
           </BottomNavigation>
         </Paper>
               </Box>

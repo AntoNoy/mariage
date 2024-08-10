@@ -31,7 +31,12 @@ export default function Resume({user}: ResumeProps) {
           Téléphone: {user.phone}
         </Typography>
       </Paper>
-      {user.guests.map((guest: Guests, index: number) => (
+      {user.guests
+      .map((guest: Guests, index: number) => {
+        if(!guest.reception){
+          return null
+        }
+        return (
         <Paper
           key={"Guest_" + guest.id}
           elevation={3}
@@ -63,7 +68,7 @@ export default function Resume({user}: ResumeProps) {
             </Typography>
           )}
         </Paper>
-      ))}
+      )})}
     </>
   );
 }

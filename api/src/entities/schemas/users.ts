@@ -34,6 +34,9 @@ export class Users {
   @Column({ name: "role", type: "enum", enum: RolesEnum, default: RolesEnum.GUEST })
   role: RolesEnum;
 
+  @Column({name: 'replied', type: 'timestamp', nullable: true, default: null})
+  repliedAt: Date|null;
+
   @Column({ type: "boolean", name: "with_dinner", default: false })
   withDinner: boolean;
 
