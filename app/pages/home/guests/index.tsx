@@ -228,7 +228,6 @@ function scrollToTop(){
             </Typography>
           </Toolbar>
         </AppBar>
-        {/* <form noValidate autoComplete="off" onSubmit={handleSubmit}> */}
         <Box
           component="main"
           key="main_register"

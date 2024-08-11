@@ -19,13 +19,15 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import PeopleIcon from "@mui/icons-material/People";
 import { useEffect, useState } from "react";
 import { getUserRepliedAt } from "@/services/api/guests";
-import NightShelterIcon from '@mui/icons-material/NightShelter';
-
+import NightShelterIcon from "@mui/icons-material/NightShelter";
+import { parseCookies } from "nookies";
+import { jwtDecode } from "jwt-decode";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [pathname, setPathname] = useState(router.pathname);
   const [alreadyReplied, setAlreadyReplied] = useState<any>(false);
+  const [user, setUser] = useState<any>(false);
 
   useEffect(() => {
     setPathname(router.pathname);
@@ -34,6 +36,10 @@ export default function App({ Component, pageProps }: AppProps) {
       console.log("alreadyReplied", res);
       setAlreadyReplied(res);
     });
+    let { token } = parseCookies();
+    if (token) {
+      setUser(jwtDecode(token));
+    }
   }, [router.pathname]);
 
   if (pathname.startsWith("/home")) {
@@ -74,15 +80,14 @@ export default function App({ Component, pageProps }: AppProps) {
 
             <Box
               component="main"
-          id="mainBox"
-
+              id="mainBox"
               sx={{
                 flexGrow: 1,
                 bgcolor: "background.primary",
                 overflow: "auto",
                 p: pathname.includes("guests") ? 0 : 2,
                 width: "100%",
-                height: "100%"
+                height: "100%",
                 // pt:7,
                 // pb: 7,
               }}
@@ -120,11 +125,13 @@ export default function App({ Component, pageProps }: AppProps) {
                   value={"/home/guests"}
                   icon={<PeopleIcon />}
                 />
-                <BottomNavigationAction
-                  label="Hébergements"
-                  value={"/home/hebergements"}
-                  icon={<NightShelterIcon />}
-                />
+                {user.withDinner && (
+                  <BottomNavigationAction
+                    label="Hébergements"
+                    value={"/home/hebergements"}
+                    icon={<NightShelterIcon />}
+                  />
+                )}
                 <BottomNavigationAction
                   label="Photos"
                   value={"/home/galerie"}

@@ -4,6 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import WeddingCardComponent from "@/components/WeddingHall";
 import { parseCookies } from "nookies";
 import { jwtDecode } from "jwt-decode";
+import Image from "next/image";
 
 export default function HomePage() {
   const [user, setUser] = React.useState<any>(undefined);
@@ -17,6 +18,8 @@ export default function HomePage() {
 
   return (
     <Box alignItems={"center"} flexDirection={"column"} display={"flex"}>
+      <Image src={`/logo.png`} alt={'alt'} width="300" height='334'  
+      style={{paddingBottom:'3vh'}}/>
       <WeddingCardComponent
         initiales="M"
         title="Mairie"
@@ -52,8 +55,8 @@ export default function HomePage() {
       </WeddingCardComponent>
 
       <WeddingCardComponent
-        initiales="VDP"
-        title="Les voutes du plessier"
+        initiales="LVP"
+        title="Les Voûtes du Plessier"
         subTitle="à partir de 15h30"
         image="https://cdn0.mariages.net/vendor/5506/3_2/960/jpeg/img-5830_3_165506-171396915619339.jpeg"
         bottomAction={
@@ -80,11 +83,11 @@ export default function HomePage() {
         }
       >
         <Typography align="justify" marginBottom={2}>
-        Cette merveilleuse journée se prolongera aux Voutes du Plessier par
+        Cette merveilleuse journée se prolongera aux Voûtes du Plessier par
           une cérémonie laïque à 15h30.
         </Typography>
         <Typography align="justify">
-        Plaisir et amities seront aussi de la partie, puisque nous nous
+        Plaisir et amitiés seront aussi de la partie, puisque nous nous
           retrouverons autour d'un apéritif champêtre au sein du domaine.
         </Typography>
         {user?.withDinner && (

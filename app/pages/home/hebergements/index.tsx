@@ -148,19 +148,7 @@ export default function InformationPage() {
             }}
           >
             <CardHeader
-              // avatar={
-              // initiales ? (
-              //   <Avatar
-              //     sx={{ bgcolor: theme.palette.primary.main }}
-              //     aria-label="recipe"
-              //   >
-              //     {initiales}
-              //   </Avatar>
-              // ) : null
-              // }
-              // action={headerAction}
-              title={"Camping"}
-              // subheader={""}
+              title={"Camping LVP"}
             />
             <CardContent
             sx={{textAlign:"center"}}
@@ -171,9 +159,7 @@ export default function InformationPage() {
                 fontSize={14}
                 textAlign="justify"
               >
-                Les Voûtes du Plessier dispose d'un camping (emplacement de
-                tente limitée) avec sanitaires et serviettes de bains fournis
-                pour 8€/personne. Paiement en espèces sur place.
+                Le domaine dispose d'un camping (emplacement de VOS tentes limitée) avec sanitaires et serviettes de bains fournis pour 8€/personne.
               </Typography>
 
               <Button  sx={{my:2}} onClick={handleOpen} variant="contained" >Reserver le camping</Button>
@@ -184,7 +170,9 @@ export default function InformationPage() {
                 fontSize={14}
                 textAlign="justify"
               >
-                Vous avez réservé {campingCount} places de camping.
+                Vous avez réservé {campingCount} places de camping ({campingCount*8}€).
+                <br/>
+                Paiement en espèces sur place.
               </Typography>
             </CardContent>
           </Card>
