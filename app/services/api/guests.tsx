@@ -38,9 +38,23 @@ export function setGestsApi(payload: Guests[]): Promise<Guests[]> {
 export function updateGestsApi(
   payload: any & { guests: Guests[] }
 ): Promise<Guests[]> {
-  return axiosInstance.patch<Guests[]>("/guests", payload).then((res) => res.data);
+  return axiosInstance
+    .patch<Guests[]>("/guests", payload)
+    .then((res) => res.data);
 }
 
 export function getAllGests() {
   return axiosInstance.get("/guests/all").then((res) => res.data);
+}
+
+export function getUserRepliedAt(): Promise<boolean> {
+  return axiosInstance.get("/users/alreadyReplied").then((res) => res.data);
+}
+
+export function getUserCampingCount(): Promise<number> {
+  return axiosInstance.get("/users/camping").then((res) => res.data);
+}
+
+export function patchUserCampingCount(count:number): Promise<void> {
+  return axiosInstance.patch(`/users/camping/${count}`).then((res) => res.data);
 }

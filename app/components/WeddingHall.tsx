@@ -21,7 +21,7 @@ export default function WeddingCardComponent({
   ...props
 }: {
   initiales?: string;
-  image: string;
+  image: any;
   title: string;
   subTitle?: string;
   children?: React.ReactNode;
@@ -46,10 +46,9 @@ export default function WeddingCardComponent({
         subheader={subTitle}
       />
       <CardMedia component="img" height="194" image={image} alt={title} />
+      {/* <img src={image}></img> */}
       <CardContent>
-        <Typography variant="body2" color="text.primary" fontSize={14}>
           {children}
-        </Typography>
       </CardContent>
       {bottomAction ? (
         <CardActions disableSpacing>

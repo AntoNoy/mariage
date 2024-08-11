@@ -4,12 +4,8 @@ import { axiosInstance } from "./axios";
 import { jwtDecode } from "jwt-decode";
 
 export const logout = async () => {
-  // await LoginService.logout().catch()
-
   destroyCookie(null, "token");
   destroyCookie(null, "refreshToken");
-
-  // router.push("/login");
 };
 
 function setAccessToken(accessToken: string) {
@@ -20,8 +16,6 @@ function setAccessToken(accessToken: string) {
     path: "/",
   });
 
-  const userDatas = jwtDecode(accessToken);
-  sessionStorage.set('userDatas', userDatas)
 }
 
 export const login = async (

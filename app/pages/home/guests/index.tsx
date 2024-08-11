@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
 
-  const route = useRouter()
+  const route = useRouter();
 
   const { control, handleSubmit, getValues, trigger, formState, setValue } =
     useForm({
@@ -42,22 +42,25 @@ export default function RegisterPage({ userPayload }: any) {
   const steps = [
     ...(userPayload.repliedAt
       ? [
-        {
-          label: `Récapitulatif du ${format(userPayload.repliedAt, 'dd/MM/yyyy à HH:mm')}`,
-          description: (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                px: 3,
-              }}
-            >
-              <Resume user={getValues()} />
-            </Box>
-          ),
-          validation: () => true,
-        },
+          {
+            label: `Récapitulatif du ${format(
+              userPayload.repliedAt,
+              "dd/MM/yyyy à HH:mm"
+            )}`,
+            description: (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  px: 3,
+                }}
+              >
+                <Resume user={getValues()} />
+              </Box>
+            ),
+            validation: () => true,
+          },
         ]
       : []),
     // {
@@ -91,12 +94,7 @@ export default function RegisterPage({ userPayload }: any) {
         if (!getValues().password || !getValues().password.length) {
           return trigger(["phone", "email"]);
         }
-        return trigger([
-          "phone", 
-          "email", 
-          "password", 
-          "password-verif"
-        ]);
+        return trigger(["phone", "email", "password", "password-verif"]);
       },
     },
     {
@@ -159,8 +157,8 @@ export default function RegisterPage({ userPayload }: any) {
               </Box>
             ),
             validation: async () => {
-              console.log(formState.errors)
-              return await trigger(["guests"])
+              console.log(formState.errors);
+              return await trigger(["guests"]);
             },
           },
         ]
@@ -183,24 +181,42 @@ export default function RegisterPage({ userPayload }: any) {
     },
   ];
 
+function scrollToTop(){
+  const element = document.getElementById('mainBox');
+  if (element) {
+    element.scrollTo(0,0);
+  }
+}
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = async () => {
     const isValid = await steps[activeStep].validation();
     if (isValid) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      scrollToTop()
+      
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    scrollToTop()
   };
 
   const maxSteps = steps.length;
 
   return (
     <>
-      <Paper sx={{ display: 'flex', zIndex: 0, flexDirection: 'column', alignContent: 'stretch' }}>
+      <Paper 
+        sx={{
+          display: "flex",
+          zIndex: 0,
+          flexDirection: "column",
+          alignContent: "stretch",
+          height:"100%"
+        }}
+      >
         <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
           <Toolbar>
             <Typography
@@ -220,19 +236,17 @@ export default function RegisterPage({ userPayload }: any) {
             flexGrow: 1,
             bgcolor: "background.primary",
             overflow: "auto",
-            // p: 3,
             pb: 1,
             pt: 3,
             bottom: 0,
             left: 0,
             right: 0,
             top: 0,
-            // position: "absolute",
+            // height:"100%"
           }}
         >
           {steps[activeStep].description}
         </Box>
-        {/* <form onSubmit={undefined}> */}
         <Paper
           sx={{ position: "sticky", bottom: 0, left: 0, right: 0, zIndex: 100 }}
           elevation={3}
@@ -250,9 +264,9 @@ export default function RegisterPage({ userPayload }: any) {
                   variant="contained"
                   onClick={handleSubmit(() => {
                     console.log("formState final", getValues());
-                    updateGestsApi(getValues()).then((res:any)=>{
-                      console.log(res.data)
-                      route.push('/')
+                    updateGestsApi(getValues()).then((res: any) => {
+                      console.log(res.data);
+                      route.push("/");
                     });
                   })}
                 >
@@ -287,7 +301,7 @@ export default function RegisterPage({ userPayload }: any) {
                 ) : (
                   <KeyboardArrowLeft />
                 )}
-                Back
+                Précédent
               </Button>
             }
           />

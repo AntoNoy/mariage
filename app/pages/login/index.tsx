@@ -49,7 +49,6 @@ export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log();
     const username = data.get('email')?.toString()
     const password = data.get('password')?.toString()
 

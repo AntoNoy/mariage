@@ -34,11 +34,14 @@ export class Users {
   @Column({ name: "role", type: "enum", enum: RolesEnum, default: RolesEnum.GUEST })
   role: RolesEnum;
 
-  @Column({name: 'replied', type: 'timestamp', nullable: true, default: null})
+  @Column({name: 'replied_at', type: 'timestamp', nullable: true, default: null})
   repliedAt: Date|null;
 
   @Column({ type: "boolean", name: "with_dinner", default: false })
   withDinner: boolean;
+
+  @Column({ type: "int", name: "camping_count", default: 0 })
+  campingCount: number;
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   created_at: Date;

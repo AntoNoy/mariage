@@ -108,6 +108,7 @@ export class AuthService {
           username: user.username,
           withDinner: user.withDinner,
           role: user.role,
+          repliedAt: user.repliedAt
         },
         {
           secret: this.configService.get<string>("JWT_SECRET"),
