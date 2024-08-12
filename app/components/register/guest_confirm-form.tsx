@@ -19,6 +19,7 @@ import { GridExpandMoreIcon } from "@mui/x-data-grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import { Control, Controller, FieldValues } from "react-hook-form";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export interface GuestFormProps {
   control: Control<FieldValues, any>;
@@ -56,12 +57,21 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant="body2" color="text.primary" fontSize={14}>
-              <p>{"- Assiète de foie gras"}</p>
-              <p>
-                {"- Filet de boeuf en croute sauce poivre vert accompagné d'un gratin dauphinois et d'une tomate provencale"}
-              </p>
-            </Typography>
+            <Box
+              alignItems={"center"}
+              flexDirection={"column"}
+              display={"flex"}
+            >
+              <Typography variant="body1" color="text.primary"  align="center">
+                {"Assiette de foie gras"}
+              </Typography>
+              <FavoriteBorderIcon></FavoriteBorderIcon>
+              <Typography variant="body1" color="text.primary"  align="center">
+                {`Filet de boeuf en croûte sauce poivre vert,
+                cêpes accompagné de son gratin gourmand de pomme de terre
+                et sa tomate provencale`}
+              </Typography>
+            </Box>
           </AccordionDetails>
         </Accordion>
         <Accordion
@@ -78,13 +88,21 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant="body2" color="text.primary" fontSize={14}>
-              <p>- Coquille St Jacque sur son lit de poireaux</p>
-              <p>
-                - Filet de bar en croute accompagné de son riz safrané et de je
-                sais plus quoi
-              </p>
-            </Typography>
+          <Box
+              alignItems={"center"}
+              flexDirection={"column"}
+              display={"flex"}
+            >
+              <Typography variant="body1" color="text.primary"  align="center">
+                {"Coquille St Jacque sur son lit de poireaux"}
+              </Typography>
+              <FavoriteBorderIcon></FavoriteBorderIcon>
+              <Typography variant="body1" color="text.primary"  align="center">
+                {`Filet de bar en croûte sauce écrevisses
+                accompagné de son riz sauvage
+                et son tatin d'endive`}
+              </Typography>
+            </Box>
           </AccordionDetails>
         </Accordion>
         {control
@@ -105,27 +123,19 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography variant="body2" color="text.primary" fontSize={14}>
-                Plat de lasagnes accompagné de sa salade.
+            <Box
+              alignItems={"center"}
+              flexDirection={"column"}
+              display={"flex"}
+            >
+              <Typography variant="body1" color="text.primary"  align="center">
+                {"Lasagnes au boeuf accompagné de sa salade."}
               </Typography>
+            </Box>
             </AccordionDetails>
           </Accordion>
         )}
       </div>
-
-      {control
-        ._getWatch("guests")
-        ?.filter((guest: Guests) => guest.reception)
-        .some((guest: Guests) => guest.type === TypeGuest.CHILD) && (
-        <Card sx={{ maxWidth: 345, marginBottom: 4 }}>
-          <CardHeader title={"Menu Enfant"} />
-          <CardContent>
-            <Typography variant="body2" color="text.primary" fontSize={14}>
-              Plat de lasagnes accompagné de sa salade.
-            </Typography>
-          </CardContent>
-        </Card>
-      )}
 
       {guests.map((guest, index) => {
         if (!control._getWatch(`guests.${index}.reception`)) {
