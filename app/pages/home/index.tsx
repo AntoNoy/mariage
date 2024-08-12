@@ -49,8 +49,7 @@ export default function HomePage() {
         }
       >
         <Typography align="justify">
-        C'est avec une grande joie et beaucoup d'émotions que nous vous
-          invitons à célébrer notre union à la mairie de Démuin à 14h.
+        {"C'est avec une grande joie et beaucoup d'émotions que nous vous invitons à célébrer notre union à la mairie de Démuin à 14h."}
         </Typography>
       </WeddingCardComponent>
 
@@ -83,20 +82,18 @@ export default function HomePage() {
         }
       >
         <Typography align="justify" marginBottom={2}>
-        Cette merveilleuse journée se prolongera aux Voûtes du Plessier par
-          une cérémonie laïque à 15h30.
+        {"Cette merveilleuse journée se prolongera aux Voûtes du Plessier par une cérémonie laïque à 15h30."}
         </Typography>
         <Typography align="justify">
-        Plaisir et amitiés seront aussi de la partie, puisque nous nous
-          retrouverons autour d'un apéritif champêtre au sein du domaine.
+        {"Plaisir et amitiés seront aussi de la partie, puisque nous nous retrouverons autour d'un apéritif champêtre au sein du domaine."}
         </Typography>
         {user?.withDinner ? (
           <Typography align="justify" marginTop={2}>
-            Suivi, à 19h30, d'un repas festif jusqu'au bout de la nuit.
+            {"Suivi, à 19h30, d'un repas festif jusqu'au bout de la nuit."}
           </Typography>
         ): (
           <Typography align="justify" marginTop={2}>
-            Suivi, à 18h30, d'une séance photo pour immortaliser cette journée.
+            {"Suivi, à 18h30, d'une séance photo pour immortaliser cette journée."}
           </Typography>
         )}
       </WeddingCardComponent>

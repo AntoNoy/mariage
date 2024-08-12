@@ -57,10 +57,9 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.primary" fontSize={14}>
-              <p>- Assiète de foie gras</p>
+              <p>{"- Assiète de foie gras"}</p>
               <p>
-                - Filet de boeuf en croute sauce poivre vert accompagné d'un
-                gratin dauphinois et d'une tomate provencale
+                {"- Filet de boeuf en croute sauce poivre vert accompagné d'un gratin dauphinois et d'une tomate provencale"}
               </p>
             </Typography>
           </AccordionDetails>

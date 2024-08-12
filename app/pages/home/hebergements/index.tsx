@@ -159,7 +159,7 @@ export default function InformationPage() {
                 fontSize={14}
                 textAlign="justify"
               >
-                Le domaine dispose d'un camping (emplacement de VOS tentes limitée) avec sanitaires et serviettes de bains fournis pour 8€/personne.
+                {"Le domaine dispose d'un camping (emplacement de VOS tentes limitée) avec sanitaires et serviettes de bains fournis pour 8€/personne."}
               </Typography>
 
               <Button  sx={{my:2}} onClick={handleOpen} variant="contained" >Reserver le camping</Button>
