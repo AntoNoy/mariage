@@ -1,9 +1,9 @@
 'use client';
 
-import { Roboto } from 'next/font/google';
+import { Playfair } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 
-const roboto = Roboto({
+const playfair = Playfair({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
@@ -29,7 +29,7 @@ const theme = createTheme({
   },
 
   typography: { 
-    fontFamily: roboto.style.fontFamily,
+    fontFamily: playfair.style.fontFamily,
   },
   components: {
     // MuiButton: {
