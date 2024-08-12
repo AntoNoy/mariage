@@ -12,10 +12,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { parseCookies, setCookie } from 'nookies';
+import { parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
 import theme from '@/ThemeRegistry/theme';
-import { jwtDecode } from 'jwt-decode';
 import { login } from '@/services/auth';
 
 function Copyright(props: any) {
@@ -104,7 +103,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email Adresse"
                 name="email"
                 autoComplete="email"
                 autoFocus

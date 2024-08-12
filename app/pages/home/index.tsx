@@ -40,7 +40,7 @@ export default function HomePage() {
               fontSize={14}
               width={"100%"}
             >
-              Addresse: <br /> 2 rue des Écoles, 80110 Démuin
+              Adresse: <br /> 2 rue des Écoles, 80110 Démuin
             </Typography>
             <Button
               fullWidth
@@ -76,7 +76,7 @@ export default function HomePage() {
               width={"100%"}
               fontSize={14}
             >
-              Addresse: <br /> 30 Le Plessier Hameau, 80250 Grivesnes
+              Adresse: <br /> 30 Le Plessier Hameau, 80250 Grivesnes
             </Typography>
             <Button
               fullWidth

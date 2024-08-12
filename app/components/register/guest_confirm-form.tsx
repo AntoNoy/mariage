@@ -69,7 +69,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               <Typography variant="body1" color="text.primary"  align="center">
                 {`Filet de boeuf en croûte sauce poivre vert,
                 cêpes accompagné de son gratin gourmand de pomme de terre
-                et sa tomate provencale`}
+                et sa tomate provençale`}
               </Typography>
             </Box>
           </AccordionDetails>
@@ -94,7 +94,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               display={"flex"}
             >
               <Typography variant="body1" color="text.primary"  align="center">
-                {"Coquille St Jacque sur son lit de poireaux"}
+                {"Coquille St Jacques sur son lit de poireaux"}
               </Typography>
               <FavoriteBorderIcon></FavoriteBorderIcon>
               <Typography variant="body1" color="text.primary"  align="center">
