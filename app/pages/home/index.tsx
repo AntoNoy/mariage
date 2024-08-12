@@ -90,9 +90,13 @@ export default function HomePage() {
         Plaisir et amitiés seront aussi de la partie, puisque nous nous
           retrouverons autour d'un apéritif champêtre au sein du domaine.
         </Typography>
-        {user?.withDinner && (
+        {user?.withDinner ? (
           <Typography align="justify" marginTop={2}>
             Suivi, à 19h30, d'un repas festif jusqu'au bout de la nuit.
+          </Typography>
+        ): (
+          <Typography align="justify" marginTop={2}>
+            Suivi, à 18h30, d'une séance photo pour immortaliser cette journée.
           </Typography>
         )}
       </WeddingCardComponent>

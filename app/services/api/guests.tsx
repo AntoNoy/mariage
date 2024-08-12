@@ -23,6 +23,7 @@ export interface Guests {
   birthyear: number | null;
   reception: boolean;
   dinner: boolean;
+  menu:string
 }
 
 export function getGestsApi() {

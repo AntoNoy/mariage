@@ -63,9 +63,14 @@ export default function Resume({user}: ResumeProps) {
             {"Vin d'honneur:"} {guest.reception ? "Oui" : "Non"}
           </Typography>
           {user.withDinner && (
+            <>
             <Typography variant="body1" gutterBottom>
               Repas: {guest.dinner ? "Oui" : "Non"}
             </Typography>
+            <Typography variant="body1" gutterBottom>
+              Menu: {guest.dinner ? guest.menu : '-'}
+            </Typography>
+            </>
           )}
         </Paper>
       )})}
