@@ -32,13 +32,16 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setPathname(router.pathname);
 
-    getUserRepliedAt().then((res) => {
-      console.log("alreadyReplied", res);
-      setAlreadyReplied(res);
-    });
-    let { token } = parseCookies();
-    if (token) {
-      setUser(jwtDecode(token));
+    if(router.pathname.startsWith('/home')){
+
+      getUserRepliedAt().then((res) => {
+        console.log("alreadyReplied", res);
+        setAlreadyReplied(res);
+      });
+      let { token } = parseCookies();
+      if (token) {
+        setUser(jwtDecode(token));
+      }
     }
   }, [router.pathname]);
 

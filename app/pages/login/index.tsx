@@ -21,8 +21,8 @@ function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://mariage.noyelle.eu/">
+        mariage.noyelle.eu
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -38,7 +38,6 @@ export default function SignInSide() {
 
   React.useEffect(() => {
     const { token } = parseCookies();
-    console.log("cookieStore", token);
     if (token) {
       router.push("/home");
     }
@@ -73,7 +72,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: 'url(https://mariage.noyelle.eu/_next/image?url=%2Flogo.png&w=640&q=75)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -95,7 +94,7 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Mariage Morel Noyelle
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -103,7 +102,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 id="email"
-                label="Email Adresse"
+                label="Nom d'utilisateur"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -113,35 +112,21 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Mot de passe"
                 type="password"
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2, color: theme.palette.primary.main, bgcolor: 'white' }}
               >
-                Sign In
+                Se connecter
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+              
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
