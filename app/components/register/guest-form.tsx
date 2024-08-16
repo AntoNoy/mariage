@@ -18,25 +18,29 @@ export default function GuestForm(props: GuestFormProps) {
           my: 1,
         }}
       >
+        <Typography variant="h6" gutterBottom>
+          {index + 1}/{props.guests.length} {translateGuestType(guest.type)}
+        </Typography>
         <Box
           alignContent={"space-around"}
           flexDirection={"row"}
+          alignItems={"center"}
           display={"flex"}
         >
-          <Typography variant="h6" gutterBottom>
-            {index + 1}/{props.guests.length} {translateGuestType(guest.type)}
-          </Typography>
-
           <Controller
             name={`guests.${index}.reception`}
             rules={{ required: false }}
             control={props.control}
             render={({ field }) => (
-              <Switch
-                {...field}
-                key={`Guest_${index}_switch_reception`}
-                defaultChecked={field.value || false}
-              />
+              <>
+                <Typography>Présent : Non</Typography>
+                <Switch
+                  {...field}
+                  key={`Guest_${index}_switch_reception`}
+                  defaultChecked={field.value || false}
+                />
+                <Typography>Oui :</Typography>
+              </>
             )}
           />
         </Box>

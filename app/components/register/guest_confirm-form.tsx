@@ -33,19 +33,16 @@ export enum MenuEnum {
 }
 
 export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
-  const [expanded, setExpanded] = useState<string | false>(false);
-
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [expanded2, setExpanded2] = useState<boolean>(false);
+  const [expanded3, setExpanded3] = useState<boolean>(false);
 
   return (
     <>
       <div>
         <Accordion
-          expanded={expanded === "panel1"}
-          onChange={handleChange("panel1")}
+          expanded={expanded}
+          onChange={()=>setExpanded((previous)=>!previous)}
         >
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
@@ -75,8 +72,8 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
           </AccordionDetails>
         </Accordion>
         <Accordion
-          expanded={expanded === "panel2"}
-          onChange={handleChange("panel2")}
+          expanded={expanded2}
+          onChange={()=>setExpanded2((previous)=>!previous)}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -110,8 +107,8 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
           ?.filter((guest: Guests) => guest.reception)
           .some((guest: Guests) => guest.type === TypeGuest.CHILD) && (
           <Accordion
-            expanded={expanded === "panel3"}
-            onChange={handleChange("panel3")}
+            expanded={expanded3}
+            onChange={()=>setExpanded3((previous)=>!previous)}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -141,7 +138,6 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
         if (!control._getWatch(`guests.${index}.reception`)) {
           return null;
         }
-        console.log(guest);
         return (
           <Paper
             elevation={3}
@@ -151,12 +147,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               my: 1,
             }}
           >
-            <Box
-              alignContent={"space-around"}
-              flexDirection={"row"}
-              display={"flex"}
-            >
-              <Typography variant="h6" gutterBottom>
+<Typography variant="h6" gutterBottom>
                 {index + 1}/{guests.length}{" "}
                 {control
                   ._getWatch([
@@ -165,6 +156,15 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                   ])
                   .join(" ")}
               </Typography>
+
+            <Box
+              alignContent={"space-around"}
+              flexDirection={"row"}
+              alignItems={"center"}
+              display={"flex"}
+            >
+              
+                <Typography>Repas : Non</Typography>
 
               <Controller
                 name={`guests.${index}.dinner`}
@@ -177,6 +177,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                   />
                 )}
               />
+              <Typography>Oui</Typography>
             </Box>
 
             <Controller
@@ -216,7 +217,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
 
                 return (
                   <>
-                    <InputLabel id="select-dinner-label">Menu</InputLabel>
+                    <InputLabel id="select-dinner-label">Choix du menu</InputLabel>
                     <Select
                       {...field}
                       label="Menu"
