@@ -35,7 +35,6 @@ export default function App({ Component, pageProps }: AppProps) {
     if(router.pathname.startsWith('/home')){
 
       getUserRepliedAt().then((res) => {
-        console.log("alreadyReplied", res);
         setAlreadyReplied(res);
       });
       let { token } = parseCookies();
@@ -75,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   sx={{ flexGrow: 1 }}
                   onClick={() => router.push("/home")}
                 >
-                  Mariage Morel ❤️ Noyelle
+                  Mariage ❤️ Antony & Mélanie
                 </Typography>
                 <AppMenu />
               </Toolbar>

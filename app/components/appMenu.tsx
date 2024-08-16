@@ -3,19 +3,26 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-import InfoIcon from "@mui/icons-material/Info";
 import { useRouter } from "next/navigation";
 import theme from "../ThemeRegistry/theme";
-import PeopleIcon from '@mui/icons-material/People';
-import { logout } from "@/services/auth";
-import { destroyCookie } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
+import { jwtDecode } from "jwt-decode";
 
 
 export default function AppMenu() {
+  const [user, setUser] = React.useState<any>(undefined);
+
+  React.useEffect(() => {
+    let { token } = parseCookies();
+    if (token) {
+      setUser(jwtDecode(token));
+    }
+    console.log(user)
+  }, []);
+
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -44,7 +51,7 @@ export default function AppMenu() {
               color: theme.palette.primary.main,
             }}
           >
-            M
+            {user?.username ? user?.username.substring(0,1): 'M'}
           </Avatar>
         </IconButton>
       </Tooltip>
@@ -83,15 +90,15 @@ export default function AppMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => {
+        {user?.role === 'admin' && <MenuItem onClick={() => {
           router.push("/admin");
         }}>
           <Avatar /> Admin
-        </MenuItem>
+        </MenuItem>}
 
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <Avatar /> Mon compte
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={() => {

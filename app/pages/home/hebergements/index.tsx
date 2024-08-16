@@ -85,7 +85,7 @@ export default function InformationPage() {
               minWidth: "300px",
             }}
           >
-            <CardHeader title={"Camping LVP"} />
+            <CardHeader title={"Camping"} />
             <CardContent sx={{ textAlign: "center" }}>
               <Typography
                 variant="body2"
@@ -93,8 +93,8 @@ export default function InformationPage() {
                 fontSize={18}
                 textAlign="justify"
               >
-                {`Le domaine dispose d'un camping (emplacement de VOS tentes limitée)
-                avec sanitaires et serviettes de bains fournis pour 8€/personne.`}
+                {`Les Voûtes du Plessier dispose d'un camping où vous pouvez planter vos tentes
+                (emplacement limité) avec sanitaires et serviettes de bains fournis pour 8€/personne.`}
               </Typography>
 
               <Button sx={{ my: 2 }} onClick={handleOpen} variant="contained">
@@ -132,9 +132,7 @@ export default function InformationPage() {
               minWidth: "300px",
             }}
           >
-            <CardHeader
-              title={"Hébergements proches du domaine :"}
-            />
+            <CardHeader title={"Hébergements proches du domaine :"} />
             <CardContent>
               <Box
                 alignItems={"center"}
