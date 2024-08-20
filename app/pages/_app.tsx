@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [router.pathname]);
 
-  if (pathname.startsWith("/home")) {
+  if (pathname.startsWith("/home")||pathname.startsWith("/admin")) {
     return (
       <>
         <ThemeRegistry>
@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   sx={{ flexGrow: 1 }}
                   onClick={() => router.push("/home")}
                 >
-                  Mariage ❤️ Antony & Mélanie
+                  Antony & Mélanie ❤️ 17/05/2025
                 </Typography>
                 <AppMenu />
               </Toolbar>

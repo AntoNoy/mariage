@@ -184,7 +184,7 @@ export default function AdminPageUsers() {
       } else if (adultsDiff < 0) {
         for (let i = adultsDiff; i < 0; i++) {
           userCustom.guests.splice(
-            userCustom.guests.findIndex((g) => g.type === TypeGuest.ADULT),
+            userCustom.guests.findLastIndex((g) => g.type === TypeGuest.ADULT),
             1
           );
         }
@@ -211,7 +211,7 @@ export default function AdminPageUsers() {
       } else if (childDiff < 0) {
         for (let i = childDiff; i < 0; i++) {
           userCustom.guests.splice(
-            userCustom.guests.findIndex((g) => g.type !== TypeGuest.ADULT),
+            userCustom.guests.findLastIndex((g) => g.type !== TypeGuest.ADULT),
             1
           );
         }
