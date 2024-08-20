@@ -204,18 +204,12 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                   );
                   if (age > 15) {
                     adultMenu = true;
+                  } else if(age < 2){
+                    return (<Typography>{`Il n'y a pas de menu pour les bébés`}</Typography>);
                   } else {
                     adultMenu = false;
                   }
                 }
-
-                // if (!adultMenu) {
-                //   field.value = MenuEnum.ENFANT;
-                // }
-                // else 
-                // if (adultMenu && field.value === MenuEnum.ENFANT) {
-                //   field.value = null;
-                // }
 
                 return (
                   <>

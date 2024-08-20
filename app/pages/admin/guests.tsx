@@ -8,7 +8,6 @@ export default function AdminPageGuests() {
   const [filters, setFilters] = useState<any>([]);
   useEffect(() => {
     getAllGests().then((data: any[]) => {
-      console.log(data);
       setGuests(data.flatMap((user) => {
         return user.guests.map((guest: any) => {
           return {
@@ -34,16 +33,13 @@ export default function AdminPageGuests() {
       headerName: "Utilisateur",
       type: "string",
     },
-    { field: "id", headerName: "ID", width: 90 },
     {
       field: "firstname",
       headerName: "Prénom",
-      editable: true,
     },
     {
       field: "lastname",
       headerName: "Nom",
-      editable: true,
     },
     {
       field: "reception",
@@ -65,7 +61,7 @@ export default function AdminPageGuests() {
     },
     {
       field: "age",
-      headerName: "Année de naissance",
+      headerName: "Age",
     },
     {
       field: "menu",

@@ -76,7 +76,7 @@ export default function Resume({ user }: ResumeProps) {
               {`${
                 guestToDinner.length === 0
                   ? "Vous ne mangerez pas avec nous."
-                  : `${guestToDinner.length} invité ${
+                  : `${guestToDinner.length} invité${
                       guestToDinner.length > 1 ? "s mangeront" : " mangera"
                     } au repas`
               }`}
@@ -111,11 +111,11 @@ export default function Resume({ user }: ResumeProps) {
             </Typography>
             {guest.type === "child" && (
               <Typography variant="body1" gutterBottom>
-                Année de naissance: {guest.age}
+                Age: {guest.age}
               </Typography>
             )}
             <Typography variant="body1" gutterBottom>
-              {"Vin d'honneur:"} {guest.reception ? "Oui" : "Non"}
+              {"Présent:"} {guest.reception ? "Oui" : "Non"}
             </Typography>
             {user.withDinner && (
               <>
