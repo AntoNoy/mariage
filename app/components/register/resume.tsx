@@ -45,15 +45,14 @@ export default function Resume({ user }: ResumeProps) {
           textAlign={"center"}
           variant="subtitle1"
         >
-          {" "}
-          Aucun invité de présent
+          {" Aucun invité de présent"}
         </Typography>
       )}
 
-      {guestToReception.length && (
-        <>
-              <Divider sx={{mx:2, my:3}}></Divider>
+      <Divider sx={{ mx: 2, my: 3 }}></Divider>
 
+      {guestToReception.length ? (
+        <>
           <Typography
             color={"primary"}
             fontWeight={"bold"}
@@ -74,15 +73,19 @@ export default function Resume({ user }: ResumeProps) {
               textAlign={"center"}
               variant="subtitle1"
             >
-              {`${guestToDinner.length === 0 ? 'Vous ne mangerez pas avec nous.': `${guestToDinner.length} invité ${
-                guestToDinner.length > 1 ? "s mangeront" : " mangera"
-              } au repas`}`}
+              {`${
+                guestToDinner.length === 0
+                  ? "Vous ne mangerez pas avec nous."
+                  : `${guestToDinner.length} invité ${
+                      guestToDinner.length > 1 ? "s mangeront" : " mangera"
+                    } au repas`
+              }`}
             </Typography>
-          ):null}
+          ) : null}
         </>
-      )}
+      ) : null}
 
-      <Divider sx={{mx:2, my:3}}></Divider>
+      <Divider sx={{ mx: 2, my: 3 }}></Divider>
 
       {user.guests.map((guest: Guests, index: number) => {
         if (!guest.reception) {

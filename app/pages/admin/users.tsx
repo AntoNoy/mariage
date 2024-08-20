@@ -10,7 +10,6 @@ import {
   Modal,
   Switch,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
@@ -164,32 +163,7 @@ export default function AdminPageUsers() {
     if (!userCustom.guests) {
       userCustom.guests = [];
     }
-    if (userCustomGuestCount.childs !== undefined) {
-      const actualChilds = userCustom.guests.filter(
-        (g) => g.type !== TypeGuest.ADULT
-      );
-      const childDiff = -(actualChilds.length - userCustomGuestCount.childs);
-      if (childDiff > 0) {
-        for (let i = 0; i < childDiff; i++) {
-          userCustom.guests.push({
-            type: TypeGuest.CHILD,
-            age: null,
-            dinner: false,
-            firstname: null,
-            lastname: null,
-            menu: null,
-            reception: false,
-          });
-        }
-      } else if (childDiff < 0) {
-        for (let i = childDiff; i < 0; i++) {
-          userCustom.guests.splice(
-            userCustom.guests.findIndex((g) => g.type !== TypeGuest.ADULT),
-            1
-          );
-        }
-      }
-    }
+  
     if (userCustomGuestCount.adults !== undefined) {
       const actualAdults = userCustom.guests.filter(
         (g) => g.type === TypeGuest.ADULT
@@ -217,7 +191,33 @@ export default function AdminPageUsers() {
       }
     }
 
-    console.log(userCustom);
+    if (userCustomGuestCount.childs !== undefined) {
+      const actualChilds = userCustom.guests.filter(
+        (g) => g.type !== TypeGuest.ADULT
+      );
+      const childDiff = -(actualChilds.length - userCustomGuestCount.childs);
+      if (childDiff > 0) {
+        for (let i = 0; i < childDiff; i++) {
+          userCustom.guests.push({
+            type: TypeGuest.CHILD,
+            age: null,
+            dinner: false,
+            firstname: null,
+            lastname: null,
+            menu: null,
+            reception: false,
+          });
+        }
+      } else if (childDiff < 0) {
+        for (let i = childDiff; i < 0; i++) {
+          userCustom.guests.splice(
+            userCustom.guests.findIndex((g) => g.type !== TypeGuest.ADULT),
+            1
+          );
+        }
+      }
+    }
+
   }
 
   return (
