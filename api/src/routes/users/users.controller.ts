@@ -1,6 +1,9 @@
-import { Controller, Get, NotFoundException, Param, ParseIntPipe, Patch } from "@nestjs/common";
+import { Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
+import { Roles } from "src/auth/roles.decorator";
 import { User } from "src/auth/user.decorator";
+import { RolesEnum } from "src/entities/definitions";
 import { EntitiesService } from "src/entities/entities.service";
+import { Guests } from "src/entities/schemas/guests";
 import { Users } from "src/entities/schemas/users";
 
 @Controller('users')
@@ -8,6 +11,21 @@ export class UsersController {
     constructor(
         private readonly entitiesService: EntitiesService
     ) { }
+
+    @Roles(RolesEnum.ADMIN)
+    @Post()
+    async saveUser(@Body() userPayload: Users) {
+        const user = await this.entitiesService.manager.save(Users, { id: userPayload.id, username: userPayload.username, withDinner: userPayload.withDinner, repliedAt: null })
+        if (!user) {
+            return;
+        }
+        await this.entitiesService.manager.delete(Guests, { userId: user.id })
+        if (userPayload.guests) {
+            await Promise.all(
+                userPayload.guests.map(guest => this.entitiesService.manager.save(Guests, { ...guest, userId: user.id }))
+            )
+        }
+    }
 
     @Get('alreadyReplied')
     async alreadyReplied(@User('id') userId: number): Promise<boolean> {

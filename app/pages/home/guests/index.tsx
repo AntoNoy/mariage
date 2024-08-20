@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Modal, Toolbar } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { getGuestsDetails, registerByUuid } from "@/services/auth";
 import { useForm, useFormState } from "react-hook-form";
@@ -15,13 +15,26 @@ import GuestForm from "@/components/register/guest-form";
 import UserForm from "@/components/register/user-form";
 import Resume from "@/components/register/resume";
 import GuestConfirmForm from "@/components/register/guest_confirm-form";
-import { updateGestsApi } from "@/services/api/guests";
+import { Guests, updateGestsApi } from "@/services/api/guests";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage({ userPayload }: any) {
   const theme = useTheme();
-
+  const [openModalReception, setOpenModalReception] =
+    React.useState<boolean>(false);
+  const [openModalDinner, setOpenModalDinner] = React.useState<boolean>(false);
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    // border: "2px solid grey",
+    boxShadow: 24,
+    p: 4,
+  };
   const route = useRouter();
 
   const { control, handleSubmit, getValues, trigger, formState, setValue } =
@@ -34,10 +47,6 @@ export default function RegisterPage({ userPayload }: any) {
   const { errors } = useFormState({
     control,
   });
-
-  React.useEffect(() => {
-    console.log("useEffect errors", errors);
-  }, [errors]);
 
   const steps = [
     ...(userPayload.repliedAt
@@ -87,7 +96,7 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <UserForm control={control} setValue={setValue} />
+          <UserForm control={control} setValue={setValue} user={userPayload} />
         </Box>
       ),
       validation: async () => {
@@ -108,10 +117,20 @@ export default function RegisterPage({ userPayload }: any) {
             px: 3,
           }}
         >
-          <GuestForm control={control} guests={userPayload.guests} />
+          <GuestForm
+            control={control}
+            guests={userPayload.guests}
+            formState={formState}
+          />
         </Box>
       ),
-      validation: async () => await trigger(["guests"]),
+      validation: async () => {
+        if (getValues().guests.every((g: Guests) => !g.reception)) {
+          setOpenModalReception(true);
+        } else {
+          return await trigger(["guests"]);
+        }
+      },
     },
     // {
     //   label: "Présence au vin d'honneur",
@@ -157,8 +176,11 @@ export default function RegisterPage({ userPayload }: any) {
               </Box>
             ),
             validation: async () => {
-              console.log(formState.errors);
-              return await trigger(["guests"]);
+              if (getValues().guests.every((g: Guests) => !g.dinner)) {
+                setOpenModalDinner(true);
+              } else {
+                return await trigger(["guests"]);
+              }
             },
           },
         ]
@@ -181,12 +203,23 @@ export default function RegisterPage({ userPayload }: any) {
     },
   ];
 
-function scrollToTop(){
-  const element = document.getElementById('mainBox');
-  if (element) {
-    element.scrollTo(0,0);
+  function validForm() {
+    updateGestsApi(getValues()).then((res: any) => {
+      console.log(res.data);
+      route.push("/");
+    });
   }
-}
+
+  function scrollToTop() {
+    const element = document.getElementById("mainBox");
+    if (element) {
+      element.scrollTo(0, 0);
+    }
+    const element2 = document.getElementById("mainBox2");
+    if (element2) {
+      element2.scrollTo(0, 0);
+    }
+  }
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -194,27 +227,30 @@ function scrollToTop(){
     const isValid = await steps[activeStep].validation();
     if (isValid) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      scrollToTop()
-      
+      scrollToTop();
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    scrollToTop()
+    scrollToTop();
+  };
+
+  const goToResume = () => {
+    setActiveStep(() => maxSteps - 1);
   };
 
   const maxSteps = steps.length;
 
   return (
     <>
-      <Paper 
+      <Paper
         sx={{
           display: "flex",
           zIndex: 0,
           flexDirection: "column",
           alignContent: "stretch",
-          height:"100%"
+          height: "100%",
         }}
       >
         <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
@@ -229,6 +265,7 @@ function scrollToTop(){
           </Toolbar>
         </AppBar>
         <Box
+          id="mainBox2"
           component="main"
           key="main_register"
           sx={{
@@ -263,10 +300,7 @@ function scrollToTop(){
                   variant="contained"
                   onClick={handleSubmit(() => {
                     console.log("formState final", getValues());
-                    updateGestsApi(getValues()).then((res: any) => {
-                      console.log(res.data);
-                      route.push("/");
-                    });
+                    validForm();
                   })}
                 >
                   Valider <CheckIcon fontSize="small" />
@@ -307,6 +341,91 @@ function scrollToTop(){
         </Paper>
         {/* </form> */}
       </Paper>
+
+      <Modal
+        open={openModalReception}
+        onClose={() => setOpenModalReception(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            color={"primary"}
+            fontWeight={"bold"}
+          >
+            Vous ne serez pas présent ?
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Vous n'avez sélectionné aucun invité présent.
+          </Typography>
+          <Typography id="modal-modal-description">
+            Est ce volotaire ?
+          </Typography>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-around"}
+            sx={{ mt: 2 }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleSubmit(() => {
+                setOpenModalReception(false);
+                goToResume();
+              })}
+            >
+              Oui
+            </Button>
+            <Button onClick={() => setOpenModalReception(false)}>Annuler</Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openModalDinner}
+        onClose={() => setOpenModalDinner(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            color={"primary"}
+            fontWeight={"bold"}
+          >
+            Vous ne mangerez pas avec nous ?
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Aucun invité n'a été ajouté pour le repas.
+          </Typography>
+          <Typography id="modal-modal-description">
+            Est ce volotaire ?
+          </Typography>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-around"}
+            sx={{ mt: 2 }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleSubmit(() => {
+                console.log("formState final", getValues());
+                setOpenModalDinner(false);
+                goToResume();
+              })}
+            >
+              Oui
+            </Button>
+            <Button onClick={() => setOpenModalDinner(false)}>Annuler</Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 }

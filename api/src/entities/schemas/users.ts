@@ -15,7 +15,7 @@ export class Users {
   @PrimaryGeneratedColumn({ name: "id", type: "int" })
   id: number;
 
-  @Column({ name: "uuid", type: "varchar" })
+  @Column({ name: "uuid", type: "varchar", unique:true })
   @Generated("uuid")
   uuid: string;
 
@@ -28,7 +28,7 @@ export class Users {
   @Column({ name: "phone", type: "varchar", length: 255, nullable: true })
   phone: string;
 
-  @Column({ name: "password", type: "varchar", length: 255, nullable: true })
+  @Column({ name: "password", type: "varchar", length: 255, default: '$argon2id$v=19$m=16,t=2,p=1$dXAwQzl3Q2lpaG5TMEhmRg$5xwXRYPPTtzzJNKE4N3mZg' })
   password: string;
 
   @Column({ name: "role", type: "enum", enum: RolesEnum, default: RolesEnum.GUEST })

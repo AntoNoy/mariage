@@ -15,11 +15,6 @@ export class AuthController {
     return this.authService.initUser(uuid);
   }
 
-  @Post("register")
-  createUser(@Body() user: Users) {
-    return this.authService.validUser(user);
-  }
-
   @Post("login")
   login(@Body() payload: Login|LoginWithUuid) {
     if ('uuid' in payload) {

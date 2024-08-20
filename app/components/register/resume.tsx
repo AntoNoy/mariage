@@ -1,12 +1,16 @@
 import { Guests, translateGuestType } from "@/services/api/guests";
-import { Paper, Typography } from "@mui/material";
-
+import { Divider, Paper, Typography } from "@mui/material";
 
 export interface ResumeProps {
-    user: any;
+  user: any;
 }
 
-export default function Resume({user}: ResumeProps) {
+export default function Resume({ user }: ResumeProps) {
+  const guestToReception = user.guests.filter(
+    (guest: Guests) => guest.reception
+  );
+
+  const guestToDinner = user.guests.filter((guest: Guests) => guest.dinner);
   return (
     <>
       <Paper
@@ -31,49 +35,98 @@ export default function Resume({user}: ResumeProps) {
           Téléphone: {user.phone}
         </Typography>
       </Paper>
-      {user.guests
-      .map((guest: Guests, index: number) => {
-        if(!guest.reception){
-          return null
+
+      {guestToReception.length === 0 && (
+        <Typography
+          sx={{ mt: 3 }}
+          color={"primary"}
+          fontWeight={"bold"}
+          fontSize={20}
+          textAlign={"center"}
+          variant="subtitle1"
+        >
+          {" "}
+          Aucun invité de présent
+        </Typography>
+      )}
+
+      {guestToReception.length && (
+        <>
+              <Divider sx={{mx:2, my:3}}></Divider>
+
+          <Typography
+            color={"primary"}
+            fontWeight={"bold"}
+            fontSize={20}
+            textAlign={"center"}
+            variant="subtitle1"
+          >
+            {`${guestToReception.length} invité${
+              guestToReception.length > 1 ? "s" : ""
+            } de présents sur ${user.guests.length}`}
+          </Typography>
+
+          {user.withDinner ? (
+            <Typography
+              color={"primary"}
+              fontWeight={"bold"}
+              fontSize={20}
+              textAlign={"center"}
+              variant="subtitle1"
+            >
+              {`${guestToDinner.length === 0 ? 'Vous ne mangerez pas avec nous.': `${guestToDinner.length} invité ${
+                guestToDinner.length > 1 ? "s mangeront" : " mangera"
+              } au repas`}`}
+            </Typography>
+          ):null}
+        </>
+      )}
+
+      <Divider sx={{mx:2, my:3}}></Divider>
+
+      {user.guests.map((guest: Guests, index: number) => {
+        if (!guest.reception) {
+          return null;
         }
         return (
-        <Paper
-          key={"Guest_" + guest.id}
-          elevation={3}
-          sx={{
-            p: 2,
-            my: 1,
-          }}
-        >
-          <Typography variant="h6" gutterBottom>
-            {index + 1}/{user.guests.length} {translateGuestType(guest.type)}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Prénom: {guest.firstname}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Nom de famille: {guest.lastname}
-          </Typography>
-          {guest.type === "child" && (
-            <Typography variant="body1" gutterBottom>
-              Année de naissance: {guest.birthyear}
-            </Typography>
-          )}
-          <Typography variant="body1" gutterBottom>
-            {"Vin d'honneur:"} {guest.reception ? "Oui" : "Non"}
-          </Typography>
-          {user.withDinner && (
-            <>
-            <Typography variant="body1" gutterBottom>
-              Repas: {guest.dinner ? "Oui" : "Non"}
+          <Paper
+            key={"Guest_" + guest.id}
+            elevation={3}
+            sx={{
+              p: 2,
+              my: 1,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              {index + 1}/{user.guests.length} {translateGuestType(guest.type)}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Menu: {guest.dinner ? guest.menu : '-'}
+              Prénom: {guest.firstname}
             </Typography>
-            </>
-          )}
-        </Paper>
-      )})}
+            <Typography variant="body1" gutterBottom>
+              Nom de famille: {guest.lastname}
+            </Typography>
+            {guest.type === "child" && (
+              <Typography variant="body1" gutterBottom>
+                Année de naissance: {guest.age}
+              </Typography>
+            )}
+            <Typography variant="body1" gutterBottom>
+              {"Vin d'honneur:"} {guest.reception ? "Oui" : "Non"}
+            </Typography>
+            {user.withDinner && (
+              <>
+                <Typography variant="body1" gutterBottom>
+                  Repas: {guest.dinner ? "Oui" : "Non"}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Menu: {guest.dinner ? guest.menu : "-"}
+                </Typography>
+              </>
+            )}
+          </Paper>
+        );
+      })}
     </>
   );
 }

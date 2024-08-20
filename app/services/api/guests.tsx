@@ -4,6 +4,7 @@ import { axiosInstance } from "../axios";
 export enum TypeGuest {
   ADULT = "adult",
   CHILD = "child",
+  BABY = 'baby'
 }
 
 export function translateGuestType(type: TypeGuest) {
@@ -16,14 +17,14 @@ export function translateGuestType(type: TypeGuest) {
 }
 
 export interface Guests {
-  id: number;
+  id?: number;
   firstname: string | null;
   type: TypeGuest;
   lastname: string | null;
-  birthyear: number | null;
+  age: number | null;
   reception: boolean;
   dinner: boolean;
-  menu:string
+  menu:string|null
 }
 
 export function getGestsApi() {
@@ -58,4 +59,8 @@ export function getUserCampingCount(): Promise<number> {
 
 export function patchUserCampingCount(count:number): Promise<void> {
   return axiosInstance.patch(`/users/camping/${count}`).then((res) => res.data);
+}
+
+export function postUser(user:any): Promise<void> {
+  return axiosInstance.post(`/users`, user).then((res) => res.data);
 }

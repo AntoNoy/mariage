@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch } from "@nestjs/common";
 import * as argon2 from "argon2";
 import { Roles } from "src/auth/roles.decorator";
 import { User } from "src/auth/user.decorator";
@@ -34,6 +34,10 @@ export class GuestsController {
                 if (!guest.reception) {
                     guest.dinner = false
                 }
+
+                if(guest.dinner === false){
+                    guest.menu = null
+                }
                 return this.entityService.manager.update(Guests, { userId: user.id, id: guest.id }, guest)
             }
             )
@@ -57,7 +61,7 @@ export class GuestsController {
     @Get('all')
     getAllGuests() {
         return this.entityService.manager.createQueryBuilder(Users, 'user')
-            .select(['user.id', 'user.username', 'user.email'])
+            .select(['user.id', 'user.username', 'user.email', 'user.withDinner', 'user.uuid'])
             .leftJoinAndSelect('user.guests', 'guests')
             .getMany();
     }

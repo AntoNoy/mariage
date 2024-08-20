@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
-export default function AdminPage() {
+export default function AdminPageGuests() {
   const [guests, setGuests] = useState<any[]>([]);
   const [filters, setFilters] = useState<any>([]);
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function AdminPage() {
             reception: guest.reception,
             dinner: guest.dinner,
             foodAllergies: guest.foodAllergies,
-            birthyear: guest.birthyear,
+            age: guest.age,
             type: guest.type,
             menu: guest.menu
           };
@@ -64,7 +64,7 @@ export default function AdminPage() {
       headerName: "Type",
     },
     {
-      field: "birthyear",
+      field: "age",
       headerName: "Année de naissance",
     },
     {

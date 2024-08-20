@@ -90,7 +90,7 @@ export class AuthService {
       userPayload.guests.map((guest) => this.guestsRepo.update({ id: guest.id }, {
         firstname: guest.firstname || null,
         lastname: guest.lastname || null,
-        birthyear: guest.birthyear || null,
+        age: guest.age || null,
         reception: guest.reception,
         dinner: guest.dinner,
         foodAllergies: guest.foodAllergies || null,

@@ -11,7 +11,6 @@ import theme from "../ThemeRegistry/theme";
 import { destroyCookie, parseCookies } from "nookies";
 import { jwtDecode } from "jwt-decode";
 
-
 export default function AppMenu() {
   const [user, setUser] = React.useState<any>(undefined);
 
@@ -20,7 +19,7 @@ export default function AppMenu() {
     if (token) {
       setUser(jwtDecode(token));
     }
-    console.log(user)
+    console.log(user);
   }, []);
 
   const router = useRouter();
@@ -51,7 +50,7 @@ export default function AppMenu() {
               color: theme.palette.primary.main,
             }}
           >
-            {user?.username ? user?.username.substring(0,1): 'M'}
+            {user?.username ? user?.username.substring(0, 1) : "M"}
           </Avatar>
         </IconButton>
       </Tooltip>
@@ -90,11 +89,25 @@ export default function AppMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {user?.role === 'admin' && <MenuItem onClick={() => {
-          router.push("/admin");
-        }}>
-          <Avatar /> Admin
-        </MenuItem>}
+        {user?.role === "admin" && (
+          <>
+            <MenuItem
+              onClick={() => {
+                router.push("/admin/guests");
+              }}
+            >
+              <Avatar /> Liste des invités
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                router.push("/admin/users");
+              }}
+            >
+              <Avatar />Gestion des comptes
+            </MenuItem>
+          </>
+        )}
 
         {/* <MenuItem onClick={handleClose}>
           <Avatar /> Mon compte

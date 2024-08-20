@@ -42,7 +42,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
       <div>
         <Accordion
           expanded={expanded}
-          onChange={()=>setExpanded((previous)=>!previous)}
+          onChange={() => setExpanded((previous) => !previous)}
         >
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
@@ -59,11 +59,11 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               flexDirection={"column"}
               display={"flex"}
             >
-              <Typography variant="body1" color="text.primary"  align="center">
+              <Typography variant="body1" color="text.primary" align="center">
                 {"Assiette de foie gras"}
               </Typography>
               <FavoriteBorderIcon></FavoriteBorderIcon>
-              <Typography variant="body1" color="text.primary"  align="center">
+              <Typography variant="body1" color="text.primary" align="center">
                 {`Filet de boeuf en croûte sauce poivre vert,
                 cêpes accompagné de son gratin gourmand de pomme de terre
                 et sa tomate provençale`}
@@ -73,7 +73,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
         </Accordion>
         <Accordion
           expanded={expanded2}
-          onChange={()=>setExpanded2((previous)=>!previous)}
+          onChange={() => setExpanded2((previous) => !previous)}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -85,16 +85,16 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-          <Box
+            <Box
               alignItems={"center"}
               flexDirection={"column"}
               display={"flex"}
             >
-              <Typography variant="body1" color="text.primary"  align="center">
+              <Typography variant="body1" color="text.primary" align="center">
                 {"Coquille St Jacques sur son lit de poireaux"}
               </Typography>
               <FavoriteBorderIcon></FavoriteBorderIcon>
-              <Typography variant="body1" color="text.primary"  align="center">
+              <Typography variant="body1" color="text.primary" align="center">
                 {`Filet de bar en croûte sauce écrevisses
                 accompagné de son riz sauvage
                 et son tatin d'endive`}
@@ -108,7 +108,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
           .some((guest: Guests) => guest.type === TypeGuest.CHILD) && (
           <Accordion
             expanded={expanded3}
-            onChange={()=>setExpanded3((previous)=>!previous)}
+            onChange={() => setExpanded3((previous) => !previous)}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -120,15 +120,15 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-            <Box
-              alignItems={"center"}
-              flexDirection={"column"}
-              display={"flex"}
-            >
-              <Typography variant="body1" color="text.primary"  align="center">
-                {"Lasagnes au boeuf accompagné de sa salade."}
-              </Typography>
-            </Box>
+              <Box
+                alignItems={"center"}
+                flexDirection={"column"}
+                display={"flex"}
+              >
+                <Typography variant="body1" color="text.primary" align="center">
+                  {"Lasagnes au boeuf accompagné de sa salade."}
+                </Typography>
+              </Box>
             </AccordionDetails>
           </Accordion>
         )}
@@ -147,15 +147,15 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               my: 1,
             }}
           >
-<Typography variant="h6" gutterBottom>
-                {index + 1}/{guests.length}{" "}
-                {control
-                  ._getWatch([
-                    `guests.${index}.firstname`,
-                    `guests.${index}.lastname`,
-                  ])
-                  .join(" ")}
-              </Typography>
+            <Typography variant="h6" gutterBottom>
+              {index + 1}/{guests.length}{" "}
+              {control
+                ._getWatch([
+                  `guests.${index}.firstname`,
+                  `guests.${index}.lastname`,
+                ])
+                .join(" ")}
+            </Typography>
 
             <Box
               alignContent={"space-around"}
@@ -163,8 +163,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
               alignItems={"center"}
               display={"flex"}
             >
-              
-                <Typography>Repas : Non</Typography>
+              <Typography>Repas : Non</Typography>
 
               <Controller
                 name={`guests.${index}.dinner`}
@@ -186,44 +185,53 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                 validate: (value, formValues) => {
                   if (!formValues.guests[index].reception) return true;
                   if (!formValues.guests[index].dinner) return true;
+                  if(guest.type === TypeGuest.BABY) return true;
                   if (!value) return "Choisissez un menu";
                 },
               }}
               control={control}
               render={({ field, fieldState: { error } }) => {
-                const birthyear = control._getWatch(
-                  `guests.${index}.birthyear`
+                const age = control._getWatch(
+                  `guests.${index}.age`
                 );
 
                 let adultMenu;
                 if (guest.type === TypeGuest.ADULT) {
                   adultMenu = true;
                 } else {
-                  const birthyear = control._getWatch(
-                    `guests.${index}.birthyear`
+                  const age = control._getWatch(
+                    `guests.${index}.age`
                   );
-                  if (birthyear < 2010) {
+                  if (age > 15) {
                     adultMenu = true;
                   } else {
                     adultMenu = false;
                   }
                 }
 
-                if (!adultMenu) {
-                  field.value = MenuEnum.ENFANT;
-                } else if (field.value === MenuEnum.ENFANT) {
-                  field.value = null;
-                }
+                // if (!adultMenu) {
+                //   field.value = MenuEnum.ENFANT;
+                // }
+                // else 
+                // if (adultMenu && field.value === MenuEnum.ENFANT) {
+                //   field.value = null;
+                // }
 
                 return (
                   <>
-                    <InputLabel id="select-dinner-label">Choix du menu</InputLabel>
+                    <InputLabel id="select-dinner-label">
+                      Choix du menu
+                    </InputLabel>
                     <Select
-                      {...field}
                       label="Menu"
                       key={`Guest_${index}_menu`}
                       defaultChecked={field.value || null}
                       error={error !== undefined}
+                      {...field}
+                      value={field.value}
+                      disabled={
+                        !control._getWatch(`guests[${index}].dinner`)
+                      }
                     >
                       {adultMenu && (
                         <MenuItem value={MenuEnum.VIANDE}>Viande</MenuItem>

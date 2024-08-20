@@ -6,12 +6,10 @@ import { Control, Controller, FieldValues } from "react-hook-form";
 export interface UserFormProps {
   control: Control<FieldValues, any>;
   setValue: any;
+  user: any;
 }
 
-export default function UserForm({
-  control,
-  setValue,
-}: UserFormProps) {
+export default function UserForm({ control, setValue, user }: UserFormProps) {
   const [displayPwd, setDisplayPwd] = useState(false);
 
   useEffect(() => {
@@ -30,22 +28,16 @@ export default function UserForm({
         <Typography variant="h6" gutterBottom>
           Informations de connexion
         </Typography>
-        <Controller
+
+        <TextField
           name="username"
           disabled
-          control={control}
-          render={({ field, fieldState: { error } }) => (
-            <TextField
-              {...field}
-              name="username"
-              error={error !== undefined}
-              label="Nom d'utilisateur"
-              sx={{
-                my: 1,
-                width: "100%",
-              }}
-            />
-          )}
+          value={user.username}
+          label="Nom d'utilisateur"
+          sx={{
+            my: 1,
+            width: "100%",
+          }}
         />
 
         <div onClick={() => setDisplayPwd((oldValue) => !oldValue)}>
@@ -59,7 +51,6 @@ export default function UserForm({
               <KeyboardArrowDown />
               Votre mot de passe par default est 2025, si vous souhaitez le
               modifier, cliquez ici
-
             </Typography>
           )}
         </div>

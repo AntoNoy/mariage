@@ -22,7 +22,6 @@ export enum MenuEnum{
   ENFANT= "enfant"
 }
 
-@Index("UX_firstname_lastname", ["firstname", "lastname"], { unique: true })
 @Entity("guests")
 export class Guests {
   @PrimaryGeneratedColumn({ name: "id", type: "int" })
@@ -34,8 +33,8 @@ export class Guests {
   @Column({ name: "lastname", type: "varchar", length: 255, nullable: true })
   lastname: string | null;
 
-  @Column({ name: "birthyear", type: "int", nullable: true })
-  birthyear: number | null;
+  @Column({ name: "age", type: "int", nullable: true })
+  age: number | null;
 
   @Column({
     name: "type",
