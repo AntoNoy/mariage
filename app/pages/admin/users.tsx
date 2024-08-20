@@ -132,6 +132,7 @@ export default function AdminPageUsers() {
       getActions: ({ row }) => {
         return [
           <GridActionsCellItem
+            key={`actionEdit-${row.id}`}
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
@@ -142,6 +143,7 @@ export default function AdminPageUsers() {
             color="inherit"
           />,
           <GridActionsCellItem
+          key={`actionCopy-${row.id}`}
             icon={<ContentCopyIcon />}
             label="Share"
             className="textPrimary"

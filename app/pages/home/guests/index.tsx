@@ -359,7 +359,7 @@ export default function RegisterPage({ userPayload }: any) {
             Vous ne serez pas présent ?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Vous n'avez sélectionné aucun invité présent.
+           {`Vous n'avez sélectionné aucun invité présent.`}
           </Typography>
           <Typography id="modal-modal-description">
             Est ce volotaire ?
@@ -401,7 +401,7 @@ export default function RegisterPage({ userPayload }: any) {
             Vous ne mangerez pas avec nous ?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Aucun invité n'a été ajouté pour le repas.
+            {`Aucun invité n'a été ajouté pour le repas.`}
           </Typography>
           <Typography id="modal-modal-description">
             Est ce volotaire ?
