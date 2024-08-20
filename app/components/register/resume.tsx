@@ -62,7 +62,7 @@ export default function Resume({ user }: ResumeProps) {
           >
             {`${guestToReception.length} invité${
               guestToReception.length > 1 ? "s" : ""
-            } de présents sur ${user.guests.length}`}
+            } présents sur ${user.guests.length}`}
           </Typography>
 
           {user.withDinner ? (
@@ -77,7 +77,7 @@ export default function Resume({ user }: ResumeProps) {
                 guestToDinner.length === 0
                   ? "Vous ne mangerez pas avec nous."
                   : `${guestToDinner.length} invité${
-                      guestToDinner.length > 1 ? "s mangeront" : " mangera"
+                      guestToDinner.length > 1 ? "s présents" : " présent"
                     } au repas`
               }`}
             </Typography>
@@ -95,36 +95,30 @@ export default function Resume({ user }: ResumeProps) {
           <Paper
             key={"Guest_" + guest.id}
             elevation={3}
+          
             sx={{
               p: 2,
               my: 1,
+              textAlign:'center'
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              {index + 1}/{user.guests.length} {translateGuestType(guest.type)}
+       
+            <Typography variant="h6" color={'primary'} fontWeight={'bold'}>
+              {`${guest.firstname} ${guest.lastname} 
+                 ${guest.type === "child" ?`
+                    (${guest.age} ${(guest.age && guest.age >1) ?`ans`:'an'})
+                `:''}
+              `}
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Prénom: {guest.firstname}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Nom de famille: {guest.lastname}
-            </Typography>
-            {guest.type === "child" && (
-              <Typography variant="body1" gutterBottom>
-                Age: {guest.age}
-              </Typography>
-            )}
-            <Typography variant="body1" gutterBottom>
-              {"Présent:"} {guest.reception ? "Oui" : "Non"}
-            </Typography>
+           
             {user.withDinner && (
               <>
                 <Typography variant="body1" gutterBottom>
                   Repas: {guest.dinner ? "Oui" : "Non"}
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Menu: {guest.dinner ? guest.menu : "-"}
-                </Typography>
+                {guest.dinner && <Typography variant="body1" gutterBottom>
+                   {guest.menu ? `Menu ${guest.menu}` : "Aucun menu"}
+                </Typography>}
               </>
             )}
           </Paper>

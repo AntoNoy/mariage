@@ -126,7 +126,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                 display={"flex"}
               >
                 <Typography variant="body1" color="text.primary" align="center">
-                  {"Lasagnes au boeuf accompagné de sa salade."}
+                  {"Lasagnes bolognaise accompagnée de sa salade."}
                 </Typography>
               </Box>
             </AccordionDetails>
@@ -148,7 +148,6 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
             }}
           >
             <Typography variant="h6" gutterBottom>
-              {index + 1}/{guests.length}{" "}
               {control
                 ._getWatch([
                   `guests.${index}.firstname`,

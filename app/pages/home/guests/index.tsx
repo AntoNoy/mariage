@@ -107,7 +107,7 @@ export default function RegisterPage({ userPayload }: any) {
       },
     },
     {
-      label: "Information sur les invités",
+      label: `Invitations (${userPayload.guests.filter((g:any)=>g.type === 'adult').length} adultes ${userPayload.guests.filter((g:any)=>g.type !== 'adult').length ? `et ${userPayload.guests.filter((g:any)=>g.type !== 'adult').length} enfants)`:''}`,
       description: (
         <Box
           sx={{
@@ -253,12 +253,16 @@ export default function RegisterPage({ userPayload }: any) {
           height: "100%",
         }}
       >
-        <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
-          <Toolbar>
+        <AppBar position="sticky" sx={{ backgroundColor: "white", height:30 }}>
+          <Toolbar sx={{height:5, display:'block'}}>
             <Typography
-              variant="h6"
+              variant="body1"
+              fontWeight={'bold'}
+              fontSize={18}
+              color={'primary'}
+              height={'5'}
               component="div"
-              sx={{ flexGrow: 1, color: theme.palette.primary.main }}
+              sx={{ flexGrow: 1,}}
             >
               {steps[activeStep].label}
             </Typography>
