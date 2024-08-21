@@ -63,7 +63,7 @@ export default function UserForm({ control, setValue, user }: UserFormProps) {
               rules={{
                 required: "Obligatoire",
                 pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                  value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/,
                   message: "Doit contenir 8 caractère 1 maj 1 min et 1 chiffre",
                 },
               }}
