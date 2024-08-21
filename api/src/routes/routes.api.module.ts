@@ -5,6 +5,8 @@ import { JwtUsersStrategy } from "src/auth/jwt.users.strategy";
 import { JwtUsersGuard } from "src/auth/jwt.users.guard";
 import { RolesGuard } from "src/auth/roles.guard";
 import { UsersRouteModule } from "./users/users.module";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+import { LoggerInterceptor } from "src/logger.interceptor";
 
 @Module({
   imports: [
@@ -21,7 +23,11 @@ import { UsersRouteModule } from "./users/users.module";
     {
       provide: 'APP_GUARD',
       useClass: RolesGuard
-    }
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggerInterceptor,
+    },
   ],
 })
 export class RouteApiModule { }

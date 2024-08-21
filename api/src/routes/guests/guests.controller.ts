@@ -6,6 +6,7 @@ import { RolesEnum } from "src/entities/definitions";
 import { EntitiesService } from "src/entities/entities.service";
 import { Guests } from "src/entities/schemas/guests";
 import { Users } from "src/entities/schemas/users";
+import { NoLogger } from "src/no-logger.decorator";
 
 @Controller('guests')
 export class GuestsController {
@@ -26,6 +27,7 @@ export class GuestsController {
         });
     }
 
+    @NoLogger('password','password-verif')
     @Patch()
     async patchGuests(@User() user: any, @Body() body: Users & { guests: Guests[] }) {
         console.log('-----', body.guests)

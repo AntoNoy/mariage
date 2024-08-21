@@ -3,6 +3,7 @@ import { Users } from "src/entities/schemas/users";
 import { AuthService } from "src/auth/auth.service";
 import { Login, LoginWithUuid } from "../definitions";
 import { Public } from "src/auth/public.decorator";
+import { NoLogger } from "src/no-logger.decorator";
 
 @Public()
 @Controller("auth")
@@ -15,6 +16,7 @@ export class AuthController {
     return this.authService.initUser(uuid);
   }
 
+  @NoLogger('password','password-verif')
   @Post("login")
   login(@Body() payload: Login|LoginWithUuid) {
     if ('uuid' in payload) {
