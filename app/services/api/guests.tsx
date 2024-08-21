@@ -39,9 +39,9 @@ export function setGestsApi(payload: Guests[]): Promise<Guests[]> {
 
 export function updateGestsApi(
   payload: any & { guests: Guests[] }
-): Promise<Guests[]> {
+): Promise<void> {
   return axiosInstance
-    .patch<Guests[]>("/guests", payload)
+    .patch("/guests", payload)
     .then((res) => res.data);
 }
 

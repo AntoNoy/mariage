@@ -203,8 +203,8 @@ export default function RegisterPage({ userPayload }: any) {
     },
   ];
 
-  function validForm() {
-    updateGestsApi(getValues()).then((res: any) => {
+  async function validForm() {
+    await updateGestsApi(getValues()).then((res: any) => {
       console.log(res.data);
       route.push("/");
     });
@@ -302,9 +302,9 @@ export default function RegisterPage({ userPayload }: any) {
                   type="button"
                   size="small"
                   variant="contained"
-                  onClick={handleSubmit(() => {
+                  onClick={handleSubmit(async () => {
                     console.log("formState final", getValues());
-                    validForm();
+                    await validForm();
                   })}
                 >
                   Valider <CheckIcon fontSize="small" />
