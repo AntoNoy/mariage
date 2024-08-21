@@ -35,6 +35,10 @@ const locationList = [
   "https://www.airbnb.fr/rooms/702763488225319628?viralityEntryPoint=1&s=76",
   "https://www.airbnb.fr/rooms/639082726038811104?viralityEntryPoint=1&s=76",
   "https://www.airbnb.fr/rooms/21160051?viralityEntryPoint=1&s=76",
+  "https://www.montdidier-hotel.fr/",
+  "https://www.airbnb.fr/rooms/1031298172741193152?viralityEntryPoint=1&s=76",
+  "https://www.airbnb.fr/rooms/1085445490749583924?viralityEntryPoint=1&s=76",
+  "https://www.airbnb.fr/rooms/770300048309179160?viralityEntryPoint=1&s=76",
 ];
 
 export default function InformationPage() {
