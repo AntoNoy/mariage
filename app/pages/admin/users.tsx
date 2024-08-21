@@ -103,6 +103,12 @@ export default function AdminPageUsers() {
   const columns: GridColDef<any>[] = [
     { field: "id", headerName: "ID", width: 10 },
     {
+      field: "repliedAt",
+      headerName: "Repas",
+      type: "boolean",
+      width: 30,
+    },
+    {
       field: "username",
       headerName: "Utilisateur",
       type: "string",
@@ -111,14 +117,12 @@ export default function AdminPageUsers() {
     {
       field: "guestCount",
       headerName: "Nbr",
-      // editable: true,
       type: "number",
       width: 30,
     },
     {
       field: "withDinner",
       headerName: "Repas",
-      // editable: true,
       type: "boolean",
       width: 30,
     },
