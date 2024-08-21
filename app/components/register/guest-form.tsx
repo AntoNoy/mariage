@@ -59,7 +59,7 @@ export default function GuestForm(props: GuestFormProps) {
                   checked={field.value || false}
                   onClick={() => handleChangeNotification()}
                 />
-                <Typography>Oui :</Typography>
+                <Typography>Oui</Typography>
               </>
             )}
           />

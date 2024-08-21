@@ -7,15 +7,21 @@ import {
 import {
   Box,
   Button,
+  ButtonGroup,
   Modal,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColDef,
+  GridFilterModel,
+} from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 interface UserCustom {
   username?: string;
@@ -25,7 +31,7 @@ interface UserCustom {
 
 export default function AdminPageUsers() {
   const [users, setUsers] = useState<any[]>([]);
-  const [filters, setFilters] = useState<any>([]);
+  const [filters, setFilters] = useState<any>({ items: [] });
 
   const [userCustom, setUserCustom] = useState<undefined | UserCustom>(
     undefined
@@ -146,12 +152,14 @@ export default function AdminPageUsers() {
             color="inherit"
           />,
           <GridActionsCellItem
-          key={`actionCopy-${row.id}`}
+            key={`actionCopy-${row.id}`}
             icon={<ContentCopyIcon />}
             label="Share"
             className="textPrimary"
             onClick={() => {
-              navigator.clipboard.writeText(`${window.location.origin}/uuid/${row.uuid}`)
+              navigator.clipboard.writeText(
+                `${window.location.origin}/uuid/${row.uuid}`
+              );
             }}
             color="inherit"
           />,
@@ -167,7 +175,7 @@ export default function AdminPageUsers() {
     if (!userCustom.guests) {
       userCustom.guests = [];
     }
-  
+
     if (userCustomGuestCount.adults !== undefined) {
       const actualAdults = userCustom.guests.filter(
         (g) => g.type === TypeGuest.ADULT
@@ -221,28 +229,80 @@ export default function AdminPageUsers() {
         }
       }
     }
-
   }
 
   return (
     <>
       <Box alignItems={"center"} flexDirection={"column"} display={"flex"}>
-        <h1>Gestion des comptes</h1>
+        <Typography variant="h6" color={"primary"} fontWeight={"bold"}>
+          Gestion des comptes
+        </Typography>
 
-        <button
-          onClick={() =>{
-            setUserCustom({ username: "", withDinner: false, guests: [] })
+        <Button
+          variant="contained"
+          sx={{ mb: 2, mt: 1 }}
+          onClick={() => {
+            setUserCustom({ username: "", withDinner: false, guests: [] });
             setOpenModal(true);
           }}
         >
           Ajouter un compte
-        </button>
+        </Button>
+
+        <ButtonGroup
+          variant="text"
+          aria-label="Basic button group"
+          sx={{ mb: 2, mt: 1 }}
+        >
+          <Button
+            onClick={() =>
+              setFilters({
+                items: [],
+              })
+            }
+          >
+            TouS
+          </Button>
+          <Button
+            onClick={() =>
+              setFilters({
+                items: [{ field: "repliedAt", operator: "is", value: "true" }],
+              } as GridFilterModel)
+            }
+          >
+            Répondu
+          </Button>
+
+          <Button
+            onClick={() =>
+              setFilters({
+                items: [{ field: "withDinner", operator: "is", value: "true" }],
+              })
+            }
+          >
+            Avec Dîner
+          </Button>
+          <Button
+            onClick={() =>
+              setFilters({
+                items: [
+                  { field: "withDinner", operator: "is", value: "false" },
+                ],
+              })
+            }
+          >
+            Sans Dîner
+          </Button>
+        </ButtonGroup>
         {users.length ? (
           <DataGrid
             sx={{ width: "100%" }}
             rows={users}
             columns={columns}
-            filterModel={filters.length ? { items: filters } : undefined}
+            columnVisibilityModel={{
+              id: false,
+            }}
+            filterModel={filters}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 100 },
@@ -262,7 +322,7 @@ export default function AdminPageUsers() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} >
+        <Box sx={style}>
           <TextField
             name="username"
             value={userCustom?.username || ""}
@@ -278,21 +338,29 @@ export default function AdminPageUsers() {
               });
             }}
           />
-          <Box display={'flex'} flexDirection={'row'} justifyContent={'start'} alignItems={'center'}>
-
-          Repas :{" "}
-          <Switch
-            checked={userCustom?.withDinner}
-            onChange={(el) => {
-              console.log(el, el.target.checked);
-              setUserCustom({
-                ...userCustom,
-                withDinner: el.target.checked,
-              });
-            }}
-          />
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"start"}
+            alignItems={"center"}
+          >
+            Repas :{" "}
+            <Switch
+              checked={userCustom?.withDinner}
+              onChange={(el) => {
+                console.log(el, el.target.checked);
+                setUserCustom({
+                  ...userCustom,
+                  withDinner: el.target.checked,
+                });
+              }}
+            />
           </Box>
-          <Box display={'flex'} flexDirection={'row'} justifyContent={'space-around'}>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-around"}
+          >
             <TextField
               name="adults"
               value={userCustomGuestCount.adults || 0}
@@ -326,7 +394,7 @@ export default function AdminPageUsers() {
               }}
             />
           </Box>
-          
+
           <Box
             display={"flex"}
             flexDirection={"row"}

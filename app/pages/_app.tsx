@@ -22,6 +22,8 @@ import { getUserRepliedAt } from "@/services/api/guests";
 import NightShelterIcon from "@mui/icons-material/NightShelter";
 import { parseCookies } from "nookies";
 import { jwtDecode } from "jwt-decode";
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -125,7 +127,7 @@ export default function App({ Component, pageProps }: AppProps) {
                       : {}),
                   }}
                   value={"/home/guests"}
-                  icon={<PeopleIcon />}
+                  icon={<MailOutlineIcon />}
                 />
                 {user.withDinner && (
                   <BottomNavigationAction
