@@ -1,0 +1,16 @@
+{
+    "name": "Mariage AntoMel",
+    "short_name": "Mariage",
+    "description": "Mariage Antony et Mélanie le 17/05/2025",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#fff",
+    "icons": [
+      {
+        "src": "/public/favicon.ico",
+        "sizes": "any",
+        "type": "image/x-icon"
+      }
+    ]
+  }
