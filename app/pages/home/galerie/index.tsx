@@ -60,7 +60,7 @@ export default function FestiveMealPage() {
           <Divider sx={{my: 2}}/>
 
           <Typography align={"center"} fontSize={18}>
-            {`Téléchargez les en cliquant sur le lien ci-dessous et revivre ces moments inoubliables avec nous.`}
+            {`Téléchargez les en cliquant sur le lien ci-dessous et revivez ces moments inoubliables avec nous.`}
           </Typography>
         </CardContent>
         <CardActions>
