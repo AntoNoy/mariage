@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CardMedia,
   InputAdornment,
   Modal,
   TextField,
@@ -15,6 +16,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import lvpImage from "../../../public/camping.jpg";
 
 const locationList = [
   "https://www.airbnb.fr/rooms/48767734?viralityEntryPoint=1&s=76",
@@ -90,6 +92,12 @@ export default function InformationPage() {
             }}
           >
             <CardHeader title={"Camping"} />
+            <CardMedia
+        component="img"
+        // height="194"
+        src={lvpImage.src}
+        alt="Paella dish"
+      />
             <CardContent sx={{ textAlign: "center" }}>
               <Typography
                 variant="body2"
