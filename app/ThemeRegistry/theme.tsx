@@ -32,6 +32,16 @@ const theme = createTheme({
     fontFamily: playfair.style.fontFamily,
   },
   components: {
+    MuiCardHeader:{
+      styleOverrides: {
+        title: {
+          fontSize: 24
+        },
+        subheader: {
+          fontSize: 20
+        },
+      }
+    },
     // MuiButton: {
     //   styleOverrides: {
     //     root: ({ ownerState }) => ({
@@ -43,15 +53,15 @@ const theme = createTheme({
     //     }),
     //   },
     // },
-    MuiAlert: {
-      styleOverrides: {
-        root: ({ ownerState }) => ({
-          ...(ownerState.severity === 'info' && {
-            backgroundColor: '#60a5fa',
-          }),
-        }),
-      },
-    },
+    // MuiAlert: {
+    //   styleOverrides: {
+    //     root: ({ ownerState }) => ({
+    //       ...(ownerState.severity === 'info' && {
+    //         backgroundColor: '#60a5fa',
+    //       }),
+    //     }),
+    //   },
+    // },
   },
 });
 

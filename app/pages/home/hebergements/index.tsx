@@ -23,6 +23,7 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import lvpImage from "../../../public/camping.jpg";
 import PreviewLink from "@/components/previewLink";
+import theme from "@/ThemeRegistry/theme";
 
 const locationList = [
   "https://www.airbnb.fr/rooms/48767734",
@@ -97,7 +98,17 @@ export default function InformationPage() {
               minWidth: "300px",
             }}
           >
-            <CardHeader title={"Camping"} />
+            <CardHeader
+              title={"Camping"}
+              avatar={
+                <Avatar
+                  sx={{ bgcolor: theme.palette.primary.main }}
+                  aria-label="recipe"
+                >
+                  {"LVP"}
+                </Avatar>
+              }
+            />
             <CardMedia
               component="img"
               // height="194"
@@ -150,7 +161,17 @@ export default function InformationPage() {
               minWidth: "300px",
             }}
           >
-            <CardHeader title={"Hébergements proches du domaine :"} />
+            <CardHeader
+              title={"Hébergements proches du domaine :"}
+              avatar={
+                <Avatar
+                  sx={{ bgcolor: theme.palette.primary.main }}
+                  aria-label="recipe"
+                >
+                  {"BnB"}
+                </Avatar>
+              }
+            />
             <CardContent>
               <List
                 sx={{
