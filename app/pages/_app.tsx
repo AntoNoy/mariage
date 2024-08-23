@@ -28,7 +28,7 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [pathname, setPathname] = useState(router.pathname);
-  const [alreadyReplied, setAlreadyReplied] = useState<any>(false);
+  const [alreadyReplied, setAlreadyReplied] = useState<any>(true);
   const [user, setUser] = useState<any>(false);
 
   useEffect(() => {
