@@ -3,6 +3,7 @@ import {
   patchUserCampingCount,
 } from "@/services/api/guests";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -10,37 +11,42 @@ import {
   CardHeader,
   CardMedia,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import lvpImage from "../../../public/camping.jpg";
+import PreviewLink from "@/components/previewLink";
 
 const locationList = [
-  "https://www.airbnb.fr/rooms/48767734?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/22876551?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/944202007972521574?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/42369007?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/29623283?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/18901533?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/13254973?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/617067996614982865?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/917426225602630342?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/29958169?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/631774154686805689?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/19777772?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/1149281449016657928?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/924416374115152552?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/51813412?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/702763488225319628?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/639082726038811104?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/21160051?viralityEntryPoint=1&s=76",
+  "https://www.airbnb.fr/rooms/48767734",
+  "https://www.airbnb.fr/rooms/22876551",
+  "https://www.airbnb.fr/rooms/944202007972521574",
+  "https://www.airbnb.fr/rooms/42369007",
+  "https://www.airbnb.fr/rooms/29623283",
+  "https://www.airbnb.fr/rooms/18901533",
+  "https://www.airbnb.fr/rooms/13254973",
+  "https://www.airbnb.fr/rooms/617067996614982865",
+  "https://www.airbnb.fr/rooms/917426225602630342",
+  "https://www.airbnb.fr/rooms/29958169",
+  "https://www.airbnb.fr/rooms/631774154686805689",
+  "https://www.airbnb.fr/rooms/19777772",
+  "https://www.airbnb.fr/rooms/1149281449016657928",
+  "https://www.airbnb.fr/rooms/924416374115152552",
+  "https://www.airbnb.fr/rooms/51813412",
+  "https://www.airbnb.fr/rooms/702763488225319628",
+  "https://www.airbnb.fr/rooms/639082726038811104",
+  "https://www.airbnb.fr/rooms/21160051",
   "https://www.montdidier-hotel.fr/",
-  "https://www.airbnb.fr/rooms/1031298172741193152?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/1085445490749583924?viralityEntryPoint=1&s=76",
-  "https://www.airbnb.fr/rooms/770300048309179160?viralityEntryPoint=1&s=76",
+  "https://www.airbnb.fr/rooms/1031298172741193152",
+  "https://www.airbnb.fr/rooms/1085445490749583924",
+  "https://www.airbnb.fr/rooms/770300048309179160",
 ];
 
 export default function InformationPage() {
@@ -93,11 +99,11 @@ export default function InformationPage() {
           >
             <CardHeader title={"Camping"} />
             <CardMedia
-        component="img"
-        // height="194"
-        src={lvpImage.src}
-        alt="Paella dish"
-      />
+              component="img"
+              // height="194"
+              src={lvpImage.src}
+              alt="Paella dish"
+            />
             <CardContent sx={{ textAlign: "center" }}>
               <Typography
                 variant="body2"
@@ -146,6 +152,105 @@ export default function InformationPage() {
           >
             <CardHeader title={"Hébergements proches du domaine :"} />
             <CardContent>
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+              >
+                {locationList.map((item: string, index) => {
+                  return (
+                    <>
+                      <PreviewLink
+                        href={item}
+                        datas={(data) => (
+                          <Link href={item} target="_blank">
+                            <ListItem alignItems="flex-start">
+                              <ListItemAvatar>
+                                <Avatar
+                                  sx={{ width: 75, height: 75, mr: 1, ml: -2 }}
+                                  alt="Remy Sharp"
+                                  src={data?.image || data?.screenshot}
+                                  variant="rounded"
+                                />
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={data?.description}
+                                secondary={
+                                  <Fragment>
+                                    <Typography
+                                      sx={{ display: "inline" }}
+                                      component="span"
+                                      variant="body2"
+                                      color="text.primary"
+                                    >
+                                      {data?.title}
+                                    </Typography>
+                                    {/* {" — I'll be in your neighborhood doing errands this…"} */}
+                                  </Fragment>
+                                }
+                              />
+                            </ListItem>
+                          </Link>
+                        )}
+                      />
+                    </>
+                  );
+                })}
+
+                {/* <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar
+                      alt="Travis Howard"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Summer BBQ"
+                    secondary={
+                      <Fragment>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          to Scott, Alex, Jennifer
+                        </Typography>
+                        {" — Wish I could come, but I'm out of town this…"}
+                      </Fragment>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar
+                      alt="Cindy Baker"
+                      src="/static/images/avatar/3.jpg"
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Oui Oui"
+                    secondary={
+                      <Fragment>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          Sandra Adams
+                        </Typography>
+                        {" — Do you have Paris recommendations? Have you ever…"}
+                      </Fragment>
+                    }
+                  />
+                </ListItem> */}
+              </List>
+
               <Box
                 alignItems={"center"}
                 flexDirection={"column"}
@@ -156,10 +261,12 @@ export default function InformationPage() {
                 {locationList.map((item: string, index) => {
                   return (
                     <>
-                      <Link href={item} target="_blank">
-                        Lien {index + 1}
-                      </Link>{" "}
-                      <br />
+                      <PreviewLink
+                        href={item}
+                        datas={(data) => {
+                          <Typography>{data?.image}</Typography>;
+                        }}
+                      />
                     </>
                   );
                 })}
