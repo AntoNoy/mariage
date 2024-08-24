@@ -1,30 +1,24 @@
 import React, { useCallback, useEffect } from "react";
+import aBBLogo from "../public/airbnb.jpg";
+import noImage from "../public/no_image.jpg";
+
+interface PreviewLinkDatas {
+  image?: string;
+  title?: string;
+  description?: string;
+  screenshot?: string;
+}
 
 type Props = {
   children?: any;
   href: string;
-  datas: (
-    data:
-      | {
-          image?: string;
-          title?: string;
-          description?: string;
-          screenshot?: string;
-        }
-      | undefined
-  ) => any;
+  datas: (data: PreviewLinkDatas) => any;
 };
 
 export default function PreviewLink({ href, datas }: Props) {
-  let [dataPreview, setDataPreview] = React.useState<
-    | {
-        image?: string;
-        title?: string;
-        description?: string;
-        screenshot?: string;
-      }
-    | undefined
-  >();
+  const defaultDataPreview = {};
+  let [dataPreview, setDataPreview] =
+    React.useState<PreviewLinkDatas>(defaultDataPreview);
 
   let handleFetchImage = useCallback(async (url: string) => {
     fetch(`/api/link-preview?url=${url}`)
@@ -32,8 +26,8 @@ export default function PreviewLink({ href, datas }: Props) {
         setDataPreview(await res.json());
       })
       .catch(() => {
-        console.log('error')
-        setDataPreview(undefined);
+        console.log("error");
+        setDataPreview(defaultDataPreview);
       });
   }, []);
 
@@ -41,5 +35,19 @@ export default function PreviewLink({ href, datas }: Props) {
     handleFetchImage(href);
   }, [href]);
 
-  return dataPreview ? datas(dataPreview) : undefined;
+  function formatDatas(datas: PreviewLinkDatas): PreviewLinkDatas {
+    if (!datas.image) {
+      datas.image = href.includes("airbnb") ? aBBLogo.src : noImage.src;
+    }
+    if (!isNaN(parseInt(datas.title||''))) {
+      datas.title = undefined;
+    }
+    if (!datas.title) {
+      datas.title = href;
+    }
+
+    return datas;
+  }
+
+  return datas(formatDatas(dataPreview));
 }
