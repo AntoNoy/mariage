@@ -24,6 +24,8 @@ import { Fragment, useEffect, useState } from "react";
 import lvpImage from "../../../public/camping.jpg";
 import PreviewLink from "@/components/previewLink";
 import theme from "@/ThemeRegistry/theme";
+import { jwtDecode } from "jwt-decode";
+import { parseCookies } from "nookies";
 
 const locationList = [
   "https://www.airbnb.fr/rooms/48767734",
@@ -52,6 +54,7 @@ const locationList = [
 
 export default function InformationPage() {
   const [campingCount, setCampingCount] = useState(0);
+  const [user, setUser] = useState<any>(false);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -77,73 +80,85 @@ export default function InformationPage() {
     getUserCampingCount().then((res) => {
       setCampingCount(res);
     });
+    let { token } = parseCookies();
+    if (token) {
+      setUser(jwtDecode(token));
+    }
   }, []);
 
   return (
     <>
       <Box alignItems={"center"} flexDirection={"column"} display={"flex"}>
-        <Typography variant="h3" mt={"15px"}>
-          Sur place
-        </Typography>
-        <Box
-          alignItems={"center"}
-          flexDirection={"row"}
-          display={"flex"}
-          flexWrap={"wrap"}
-        >
-          <Card
-            sx={{
-              flex: "1 0 21%",
-              margin: "5px",
-              minWidth: "300px",
-            }}
-          >
-            <CardHeader
-              title={"Camping"}
-              avatar={
-                <Avatar
-                  sx={{ bgcolor: theme.palette.primary.main }}
-                  aria-label="recipe"
-                >
-                  {"LVP"}
-                </Avatar>
-              }
-            />
-            <CardMedia
-              component="img"
-              // height="194"
-              src={lvpImage.src}
-              alt="Paella dish"
-            />
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography
-                variant="body2"
-                color="text.primary"
-                fontSize={18}
-                textAlign="justify"
+        {user.withDinner && (
+          <>
+            <Typography variant="h3" mt={"15px"}>
+              Sur place
+            </Typography>
+            <Box
+              alignItems={"center"}
+              flexDirection={"row"}
+              display={"flex"}
+              flexWrap={"wrap"}
+            >
+              <Card
+                sx={{
+                  flex: "1 0 21%",
+                  margin: "5px",
+                  minWidth: "300px",
+                }}
               >
-                {`Les Voûtes du Plessier dispose d'un camping où vous pouvez planter vos tentes
+                <CardHeader
+                  title={"Camping"}
+                  avatar={
+                    <Avatar
+                      sx={{ bgcolor: theme.palette.primary.main }}
+                      aria-label="recipe"
+                    >
+                      {"LVP"}
+                    </Avatar>
+                  }
+                />
+                <CardMedia
+                  component="img"
+                  // height="194"
+                  src={lvpImage.src}
+                  alt="Paella dish"
+                />
+                <CardContent sx={{ textAlign: "center" }}>
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                    fontSize={18}
+                    textAlign="justify"
+                  >
+                    {`Les Voûtes du Plessier dispose d'un camping où vous pouvez planter vos tentes
                 (emplacement limité) avec sanitaires et serviettes de bains fournis pour 8€/personne.`}
-              </Typography>
+                  </Typography>
 
-              <Button sx={{ my: 2 }} onClick={handleOpen} variant="contained">
-                Reserver le camping
-              </Button>
+                  <Button
+                    sx={{ my: 2 }}
+                    onClick={handleOpen}
+                    variant="contained"
+                  >
+                    Reserver le camping
+                  </Button>
 
-              <Typography
-                variant="body2"
-                color="text.primary"
-                fontSize={18}
-                textAlign="justify"
-              >
-                Vous avez réservé {campingCount} places de camping (
-                {campingCount * 8}€).
-                <br />
-                Paiement en espèces sur place.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                    fontSize={18}
+                    textAlign="justify"
+                  >
+                    Vous avez réservé {campingCount} places de camping (
+                    {campingCount * 8}€).
+                    <br />
+                    Paiement en espèces sur place.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          </>
+        )}
         <Typography variant="h3" mt={"15px"}>
           Aux alentours
         </Typography>

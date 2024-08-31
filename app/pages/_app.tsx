@@ -12,41 +12,31 @@ import {
 } from "@mui/material";
 import AppMenu from "@/components/appMenu";
 import { useRouter } from "next/router";
-import InfoIcon from "@mui/icons-material/Info";
 import HomeIcon from "@mui/icons-material/Home";
 import CameraIcon from "@mui/icons-material/Camera";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import PeopleIcon from "@mui/icons-material/People";
 import { useEffect, useState } from "react";
 import { getUserRepliedAt } from "@/services/api/guests";
 import NightShelterIcon from "@mui/icons-material/NightShelter";
-import { parseCookies } from "nookies";
-import { jwtDecode } from "jwt-decode";
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [pathname, setPathname] = useState(router.pathname);
   const [alreadyReplied, setAlreadyReplied] = useState<any>(true);
-  const [user, setUser] = useState<any>(false);
 
   useEffect(() => {
     setPathname(router.pathname);
 
-    if(router.pathname.startsWith('/home')){
-
-      getUserRepliedAt().then((res) => {
-        setAlreadyReplied(res);
-      });
-      let { token } = parseCookies();
-      if (token) {
-        setUser(jwtDecode(token));
-      }
+    if (router.pathname.startsWith("/home")) {
+      getUserRepliedAt()
+        .then((res) => {
+          setAlreadyReplied(res);
+        })
+       .catch()
     }
   }, [router.pathname]);
 
-  if (pathname.startsWith("/home")||pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/home") || pathname.startsWith("/admin")) {
     return (
       <>
         <ThemeRegistry>
@@ -129,13 +119,11 @@ export default function App({ Component, pageProps }: AppProps) {
                   value={"/home/guests"}
                   icon={<MailOutlineIcon />}
                 />
-                {user.withDinner && (
-                  <BottomNavigationAction
-                    label="Hébergements"
-                    value={"/home/hebergements"}
-                    icon={<NightShelterIcon />}
-                  />
-                )}
+                <BottomNavigationAction
+                  label="Hébergements"
+                  value={"/home/hebergements"}
+                  icon={<NightShelterIcon />}
+                />
                 <BottomNavigationAction
                   label="Photos"
                   value={"/home/galerie"}
@@ -147,94 +135,94 @@ export default function App({ Component, pageProps }: AppProps) {
         </ThemeRegistry>
       </>
     );
-  } else if (pathname.startsWith("/admin")) {
-    return (
-      <>
-        <ThemeRegistry>
-          <Box
-            alignItems={"center"}
-            flexDirection={"column"}
-            display={"flex"}
-            sx={{
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              position: "fixed",
-              overflow: "none",
-              width: "100%",
-            }}
-          >
-            <AppBar position="relative" sx={{ flexGrow: 1 }}>
-              <Toolbar>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ flexGrow: 1 }}
-                  onClick={() => router.push("/home")}
-                >
-                  ADMIN - Mariage Morel ❤️ Noyelle
-                </Typography>
-                <AppMenu />
-              </Toolbar>
-            </AppBar>
+    // } else if (pathname.startsWith("/admin")) {
+    //   return (
+    //     <>
+    //       <ThemeRegistry>
+    //         <Box
+    //           alignItems={"center"}
+    //           flexDirection={"column"}
+    //           display={"flex"}
+    //           sx={{
+    //             top: 0,
+    //             left: 0,
+    //             right: 0,
+    //             bottom: 0,
+    //             position: "fixed",
+    //             overflow: "none",
+    //             width: "100%",
+    //           }}
+    //         >
+    //           <AppBar position="relative" sx={{ flexGrow: 1 }}>
+    //             <Toolbar>
+    //               <Typography
+    //                 variant="h6"
+    //                 component="div"
+    //                 sx={{ flexGrow: 1 }}
+    //                 onClick={() => router.push("/home")}
+    //               >
+    //                 ADMIN - Mariage Morel ❤️ Noyelle
+    //               </Typography>
+    //               <AppMenu />
+    //             </Toolbar>
+    //           </AppBar>
 
-            <Box
-              component="main"
-              sx={{
-                flexGrow: 1,
-                bgcolor: "background.primary",
-                overflow: "auto",
-                p: 2,
-                width: "100%",
-                // pt:7,
-                // pb: 7,
-              }}
-            >
-              <Component {...pageProps} />
-            </Box>
+    //           <Box
+    //             component="main"
+    //             sx={{
+    //               flexGrow: 1,
+    //               bgcolor: "background.primary",
+    //               overflow: "auto",
+    //               p: 2,
+    //               width: "100%",
+    //               // pt:7,
+    //               // pb: 7,
+    //             }}
+    //           >
+    //             <Component {...pageProps} />
+    //           </Box>
 
-            <Paper
-              sx={{
-                position: "relative",
-                width: "100%",
-              }}
-              elevation={3}
-            >
-              <BottomNavigation
-                showLabels
-                value={pathname}
-                onChange={(event, newValue) => {
-                  setPathname(newValue);
-                  router.push(newValue);
-                }}
-              >
-                <BottomNavigationAction
-                  label="Accueil"
-                  value={"/home"}
-                  icon={<HomeIcon />}
-                />
-                <BottomNavigationAction
-                  label="Informations"
-                  value={"/home/informations"}
-                  icon={<InfoIcon />}
-                />
-                <BottomNavigationAction
-                  label="Repas"
-                  value={"/home/festive-meal"}
-                  icon={<RestaurantIcon />}
-                />
-                <BottomNavigationAction
-                  label="Invités"
-                  value={"/home/guests"}
-                  icon={<PeopleIcon />}
-                />
-              </BottomNavigation>
-            </Paper>
-          </Box>
-        </ThemeRegistry>
-      </>
-    );
+    //           <Paper
+    //             sx={{
+    //               position: "relative",
+    //               width: "100%",
+    //             }}
+    //             elevation={3}
+    //           >
+    //             <BottomNavigation
+    //               showLabels
+    //               value={pathname}
+    //               onChange={(event, newValue) => {
+    //                 setPathname(newValue);
+    //                 router.push(newValue);
+    //               }}
+    //             >
+    //               <BottomNavigationAction
+    //                 label="Accueil"
+    //                 value={"/home"}
+    //                 icon={<HomeIcon />}
+    //               />
+    //               <BottomNavigationAction
+    //                 label="Informations"
+    //                 value={"/home/informations"}
+    //                 icon={<InfoIcon />}
+    //               />
+    //               <BottomNavigationAction
+    //                 label="Repas"
+    //                 value={"/home/festive-meal"}
+    //                 icon={<RestaurantIcon />}
+    //               />
+    //               <BottomNavigationAction
+    //                 label="Invités"
+    //                 value={"/home/guests"}
+    //                 icon={<PeopleIcon />}
+    //               />
+    //             </BottomNavigation>
+    //           </Paper>
+    //         </Box>
+    //       </ThemeRegistry>
+    //     </>
+    //   );
   } else {
     return (
       <ThemeRegistry>
