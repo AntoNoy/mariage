@@ -7,12 +7,14 @@ import { EntitiesService } from "src/entities/entities.service";
 import { Guests } from "src/entities/schemas/guests";
 import { Users } from "src/entities/schemas/users";
 import { NoLogger } from "src/no-logger.decorator";
+import { NotificationService } from "src/services/notifications.service";
 
 @Controller('guests')
 export class GuestsController {
 
     constructor(
-        private readonly entityService: EntitiesService
+        private readonly entityService: EntitiesService,
+        private readonly notificationServcie: NotificationService
     ) { }
 
     @Get()
@@ -27,17 +29,19 @@ export class GuestsController {
         });
     }
 
-    @NoLogger('password','password-verif')
+    @NoLogger('password', 'password-verif')
     @Patch()
     async patchGuests(@User() user: any, @Body() body: Users & { guests: Guests[] }) {
         console.log('-----', body.guests)
+
+
         await Promise.all(
             body.guests.map(guest => {
                 if (!guest.reception) {
                     guest.dinner = false
                 }
 
-                if(guest.dinner === false){
+                if (guest.dinner === false) {
                     guest.menu = null
                 }
                 return this.entityService.manager.update(Guests, { userId: user.id, id: guest.id }, guest)
@@ -55,6 +59,20 @@ export class GuestsController {
 
             repliedAt: new Date()
         })
+
+        const userAndGuests = await this.entityService.manager.findOne(Users, { where: { id: user.id }, relations: ['guests'] },)
+
+        const isUpdate = Boolean(user.repliedAt)
+
+        this.notificationServcie.sendSmsByFree(`
+${isUpdate ? 'Modification de' : 'Nouvelle réponse de'}%0A
+${userAndGuests.username}%0A
+Avec repas : ${userAndGuests.withDinner ? 'OUI' : 'NON'}%0A
+${userAndGuests.guests.map((guest, index) => {
+            return `${index + 1}- ${guest.firstname} ${guest.lastname} - ${guest.reception ? 'Prés' : 'Abs'}${userAndGuests.withDinner ? ` - ${guest.dinner ? guest.menu : 'Abs'}` : ``}`
+        }).join('%0A')
+            }
+`)
 
     }
 

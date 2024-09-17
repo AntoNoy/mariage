@@ -7,7 +7,6 @@ import { EntitiesModule } from "./entities/entities.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 
-console.log(__dirname + "/../src/entities/schemas/*{.ts,.js}");
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal:true}),
