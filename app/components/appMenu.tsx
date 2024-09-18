@@ -91,6 +91,14 @@ export default function AppMenu() {
       >
         {user?.role === "admin" && (
           <>
+           <MenuItem
+              onClick={() => {
+                router.push("/admin/resume");
+              }}
+            >
+              <Avatar /> Résumé
+            </MenuItem>
+
             <MenuItem
               onClick={() => {
                 router.push("/admin/guests");
