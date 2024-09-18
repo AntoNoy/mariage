@@ -8,7 +8,7 @@ export class NotificationService {
     constructor(
         private readonly configService: ConfigService<{ 'SMS_NOTIFICATION_CREDENTIALS': string }, true>,
     ) {
-        this.smsFreeCredentials = this.configService.get<string>('SMS_NOTIFICATION_CREDENTIALS').split(',').map(data=>{
+        this.smsFreeCredentials = this.configService.get<string>('SMS_NOTIFICATION_CREDENTIALS').split(',').map(data => {
             const credentials = data.split(':')
             return {
                 user: credentials[0],
@@ -18,10 +18,12 @@ export class NotificationService {
     }
 
 
-    sendSmsByFree(msg:string){
-        this.smsFreeCredentials.map(account=>{
-            const url = `https://smsapi.free-mobile.fr/sendmsg?user=${account.user}&pass=${account.pass}&msg=${msg}`
-            return axios.post(url)
-        })
+    async sendSmsByFree(msg: string) {
+        await Promise.all(
+            this.smsFreeCredentials.map(account => {
+                const url = `https://smsapi.free-mobile.fr/sendmsg?user=${account.user}&pass=${account.pass}&msg=${msg}`
+                return axios.post(url)
+            })
+        )
     }
 }

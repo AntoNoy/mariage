@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Patch } from "@nestjs/common";
 import * as argon2 from "argon2";
 import { Roles } from "src/auth/roles.decorator";
 import { User } from "src/auth/user.decorator";
@@ -11,7 +11,7 @@ import { NotificationService } from "src/services/notifications.service";
 
 @Controller('guests')
 export class GuestsController {
-
+    private readonly logger: Logger = new Logger(GuestsController.name)
     constructor(
         private readonly entityService: EntitiesService,
         private readonly notificationServcie: NotificationService
@@ -60,20 +60,27 @@ export class GuestsController {
             repliedAt: new Date()
         })
 
-        const userAndGuests = await this.entityService.manager.findOne(Users, { where: { id: user.id }, relations: ['guests'] },)
+        try {
 
-        const isUpdate = Boolean(user.repliedAt)
+            const userAndGuests = await this.entityService.manager.findOne(Users, { where: { id: user.id }, relations: ['guests'] },)
 
-        this.notificationServcie.sendSmsByFree(`
-${isUpdate ? 'Modification de' : 'Nouvelle réponse de'}%0A
-${userAndGuests.username}%0A
-Avec repas : ${userAndGuests.withDinner ? 'OUI' : 'NON'}%0A
-${userAndGuests.guests.map((guest, index) => {
-            return `${index + 1}- ${guest.firstname} ${guest.lastname} - ${guest.reception ? 'Prés' : 'Abs'}${userAndGuests.withDinner ? ` - ${guest.dinner ? guest.menu : 'Abs'}` : ``}`
-        }).join('%0A')
-            }
-`)
+            const isUpdate = Boolean(user.repliedAt)
 
+            this.notificationServcie.sendSmsByFree(`
+                ${isUpdate ? 'Modification de' : 'Nouvelle réponse de'}%0A
+                ${userAndGuests.username}%0A
+                Avec repas : ${userAndGuests.withDinner ? 'OUI' : 'NON'}%0A
+                ${userAndGuests.guests.map((guest, index) => {
+                return `${index + 1}- ${guest.firstname} ${guest.lastname} - ${guest.reception ? 'Prés' : 'Abs'}${userAndGuests.withDinner ? ` - ${guest.dinner ? guest.menu : 'Abs'}` : ``}`
+            }).join('%0A')
+                }
+                `).catch(() => {
+                    this.logger.error('erreur envoie notification')
+                })
+
+        } catch (e) {
+            this.logger.error('erreur génération notification')
+        }
     }
 
 
