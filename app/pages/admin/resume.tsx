@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import PeopleIcon from "@mui/icons-material/People";
@@ -20,17 +20,28 @@ import SetMealIcon from "@mui/icons-material/SetMeal";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 import FlatwareIcon from "@mui/icons-material/Flatware";
 import NightlifeIcon from "@mui/icons-material/Nightlife";
+import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
+import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
 
 export default function AdminPageResume() {
   const [users, setUsers] = useState([]);
   const [openDinner, setOpenDinner] = useState(true);
   const [openReception, setOpenReception] = useState(true);
+  const [openCamping, setOpenCamping] = useState(false);
 
-  const handleClick = (type: "C" | "D") => {
-    if (type === "C") {
-      setOpenReception(!openReception);
-    } else {
-      setOpenDinner(!openDinner);
+  const handleClick = (type: "C" | "D" | "CP") => {
+    switch (type) {
+      case "C":
+        setOpenReception(!openReception);
+        break;
+      case "D":
+        setOpenDinner(!openDinner);
+        break;
+      case "CP":
+        setOpenCamping(!openCamping);
+        break;
+      default:
+        break;
     }
   };
 
@@ -40,63 +51,85 @@ export default function AdminPageResume() {
 
   function getCeremonieDetails() {
     return users.reduce(
-      (acc, user: any) => {
+      (
+        acc: {
+          adults: Guests[];
+          childs: Guests[];
+          total: Guests[];
+        },
+        user: any
+      ) => {
         return {
-          adults:
-            acc.adults +
-            user.guests.filter(
+          adults: [
+            ...acc.adults,
+            ...user.guests.filter(
               (g: Guests) => g.reception && g.type === TypeGuest.ADULT
-            ).length,
-          childs:
-            acc.childs +
-            user.guests.filter(
+            ),
+          ],
+          childs: [
+            ...acc.childs,
+            ...user.guests.filter(
               (g: Guests) => g.reception && g.type === TypeGuest.CHILD
-            ).length,
-          total:
-            acc.total + user.guests.filter((g: Guests) => g.reception).length,
+            ),
+          ],
+          total: [
+            ...acc.total,
+            ...user.guests.filter((g: Guests) => g.reception),
+          ],
         };
       },
       {
-        adults: 0,
-        childs: 0,
-        total: 0,
+        adults: [],
+        childs: [],
+        total: [],
       }
     );
   }
 
   function getDinerDetails() {
     return users.reduce(
-      (acc, user: any) => {
-        console.log(user);
+      (
+        acc: {
+          poisson: Guests[];
+          viande: Guests[];
+          enfant: Guests[];
+          total: Guests[];
+        },
+        user: any
+      ) => {
         if (!user.withDinner) {
           return acc;
         }
         return {
-          poisson:
-            acc.poisson +
-            user.guests.filter(
+          poisson: [
+            ...acc.poisson,
+            ...user.guests.filter(
               (g: Guests) => g.dinner && g.reception && g.menu === "poisson"
-            ).length,
-          viande:
-            acc.viande +
-            user.guests.filter(
+            ),
+          ],
+          viande: [
+            ...acc.viande,
+            ...user.guests.filter(
               (g: Guests) => g.dinner && g.reception && g.menu === "viande"
-            ).length,
-          enfant:
-            acc.enfant +
-            user.guests.filter(
+            ),
+          ],
+          enfant: [
+            ...acc.enfant,
+            ...user.guests.filter(
               (g: Guests) => g.dinner && g.reception && g.menu === "enfant"
-            ).length,
-          total:
-            acc.total +
-            user.guests.filter((g: Guests) => g.dinner && g.reception).length,
+            ),
+          ],
+          total: [
+            ...acc.total,
+            ...user.guests.filter((g: Guests) => g.dinner && g.reception),
+          ],
         };
       },
       {
-        poisson: 0,
-        viande: 0,
-        enfant: 0,
-        total: 0,
+        poisson: [],
+        viande: [],
+        enfant: [],
+        total: [],
       }
     );
   }
@@ -124,7 +157,7 @@ export default function AdminPageResume() {
               <NightlifeIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary={`Nombre de Présents à la cérémonie : `} />
-            <ListItemText primary={`${getCeremonieDetails().total}`} />
+            <ListItemText primary={`${getCeremonieDetails().total.length}`} />
             {openReception ? (
               <ExpandLess color="primary" />
             ) : (
@@ -138,7 +171,7 @@ export default function AdminPageResume() {
                   <PeopleIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Adultes" />
-                <ListItemText primary={getCeremonieDetails().adults} />
+                <ListItemText primary={getCeremonieDetails().adults.length} />
               </ListItemButton>
             </List>
             <List component="div" disablePadding>
@@ -147,7 +180,7 @@ export default function AdminPageResume() {
                   <ChildCareIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Enfants" />
-                <ListItemText primary={getCeremonieDetails().childs} />
+                <ListItemText primary={getCeremonieDetails().childs.length} />
               </ListItemButton>
             </List>
           </Collapse>
@@ -158,7 +191,7 @@ export default function AdminPageResume() {
               <FlatwareIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary={`Nombre de Présents au repas : `} />
-            <ListItemText primary={`${getDinerDetails().total}`} />
+            <ListItemText primary={`${getDinerDetails().total.length}`} />
             {openDinner ? (
               <ExpandLess color="primary" />
             ) : (
@@ -172,22 +205,57 @@ export default function AdminPageResume() {
                   <LunchDiningIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Menu viande" />
-                <ListItemText primary={getDinerDetails().viande} />
+                <ListItemText primary={getDinerDetails().viande.length} />
               </ListItemButton>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <SetMealIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Menu Poisson" />
-                <ListItemText primary={getDinerDetails().poisson} />
+                <ListItemText primary={getDinerDetails().poisson.length} />
               </ListItemButton>
               <ListItemButton sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <ChildCareIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Menu Enfant" />
-                <ListItemText primary={getDinerDetails().enfant} />
+                <ListItemText primary={getDinerDetails().enfant.length} />
               </ListItemButton>
+            </List>
+          </Collapse>
+
+          <ListItemButton onClick={() => handleClick("CP")}>
+            <ListItemIcon>
+              <HolidayVillageIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary={`Nombre de places de camping : `} />
+            <ListItemText
+              primary={`${users.reduce((acc: number, us: any) => {
+                return acc + us.campingCount || 0;
+              }, 0)}`}
+            />
+            {openCamping ? (
+              <ExpandLess color="primary" />
+            ) : (
+              <ExpandMore color="primary" />
+            )}
+          </ListItemButton>
+
+          <Collapse in={openCamping} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {users
+                .filter((user: any) => user.campingCount)
+                .map((user: any, index) => {
+                  return (
+                    <ListItemButton sx={{ pl: 4 }} key={`campingCountResume-${index}`}>
+                      <ListItemIcon>
+                        <AirlineSeatIndividualSuiteIcon color="primary" />
+                      </ListItemIcon>
+                      <ListItemText primary={user.username} />
+                      <ListItemText primary={user.campingCount} />
+                    </ListItemButton>
+                  );
+                })}
             </List>
           </Collapse>
         </List>

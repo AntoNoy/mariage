@@ -88,7 +88,7 @@ export class GuestsController {
     @Get('all')
     getAllGuests() {
         return this.entityService.manager.createQueryBuilder(Users, 'user')
-            .select(['user.id', 'user.username', 'user.email', 'user.withDinner', 'user.uuid', 'user.repliedAt'])
+            .select(['user.id', 'user.username', 'user.email', 'user.withDinner', 'user.uuid', 'user.repliedAt', 'user.campingCount'])
             .leftJoinAndSelect('user.guests', 'guests')
             .getMany();
     }
