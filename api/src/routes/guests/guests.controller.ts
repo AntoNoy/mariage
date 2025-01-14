@@ -67,10 +67,10 @@ export class GuestsController {
             const isUpdate = Boolean(user.repliedAt)
 
             this.notificationServcie.sendSmsByFree(`
-                ${isUpdate ? 'Modification de' : 'Nouvelle réponse de'}%0A
-                ${userAndGuests.username}%0A
-                Avec repas : ${userAndGuests.withDinner ? 'OUI' : 'NON'}%0A
-                ${userAndGuests.guests.map((guest, index) => {
+${isUpdate ? 'Modification de' : 'Nouvelle réponse de'}%0A
+${userAndGuests.username}%0A
+Avec repas : ${userAndGuests.withDinner ? 'OUI' : 'NON'}%0A
+${userAndGuests.guests.map((guest, index) => {
                 return `${index + 1}- ${guest.firstname} ${guest.lastname} - ${guest.reception ? 'Prés' : 'Abs'}${userAndGuests.withDinner ? ` - ${guest.dinner ? guest.menu : 'Abs'}` : ``}`
             }).join('%0A')
                 }
