@@ -48,6 +48,8 @@ export default function RegisterPage({ userPayload }: any) {
     control,
   });
 
+  const [disableButtons, setDisableButtons] = React.useState(false)
+
   const steps = [
     ...(userPayload.repliedAt
       ? [
@@ -204,9 +206,12 @@ export default function RegisterPage({ userPayload }: any) {
   ];
 
   async function validForm() {
+    setDisableButtons(true);
     await updateGestsApi(getValues()).then((res: any) => {
       console.log(res.data);
       route.push("/");
+    }).catch(()=>{
+      setDisableButtons(false)
     });
   }
 
@@ -302,6 +307,7 @@ export default function RegisterPage({ userPayload }: any) {
                   type="button"
                   size="small"
                   variant="contained"
+                  disabled={disableButtons}
                   onClick={handleSubmit(async () => {
                     console.log("formState final", getValues());
                     await validForm();

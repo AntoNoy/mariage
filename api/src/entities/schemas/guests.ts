@@ -19,7 +19,8 @@ export enum TypeGuest {
 export enum MenuEnum{
   POISSON= "poisson",
   VIANDE= "viande",
-  ENFANT= "enfant"
+  ENFANT= "enfant",
+  AUCUN= "aucun"
 }
 
 @Entity("guests")

@@ -30,6 +30,7 @@ export enum MenuEnum {
   POISSON = "poisson",
   VIANDE = "viande",
   ENFANT = "enfant",
+  NO_MENU= "aucun"
 }
 
 export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
@@ -106,32 +107,32 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
           ._getWatch("guests")
           ?.filter((guest: Guests) => guest.reception)
           .some((guest: Guests) => guest.type === TypeGuest.CHILD) && (
-          <Accordion
-            expanded={expanded3}
-            onChange={() => setExpanded3((previous) => !previous)}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3bh-content"
-              id="panel3bh-header"
+            <Accordion
+              expanded={expanded3}
+              onChange={() => setExpanded3((previous) => !previous)}
             >
-              <Typography sx={{ color: "text.secondary", fontWeight: "500" }}>
-                Menu Enfant
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box
-                alignItems={"center"}
-                flexDirection={"column"}
-                display={"flex"}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
+                id="panel3bh-header"
               >
-                <Typography variant="body1" color="text.primary" align="center">
-                  {"Lasagnes bolognaise accompagnée de sa salade."}
+                <Typography sx={{ color: "text.secondary", fontWeight: "500" }}>
+                  Menu Enfant
                 </Typography>
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-        )}
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box
+                  alignItems={"center"}
+                  flexDirection={"column"}
+                  display={"flex"}
+                >
+                  <Typography variant="body1" color="text.primary" align="center">
+                    {"Lasagnes bolognaise accompagnée de sa salade."}
+                  </Typography>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          )}
       </div>
 
       {guests.map((guest, index) => {
@@ -184,7 +185,6 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                 validate: (value, formValues) => {
                   if (!formValues.guests[index].reception) return true;
                   if (!formValues.guests[index].dinner) return true;
-                  if(guest.type === TypeGuest.BABY) return true;
                   if (!value) return "Choisissez un menu";
                 },
               }}
@@ -195,6 +195,7 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                 );
 
                 let adultMenu;
+                let noMenu = false;
                 if (guest.type === TypeGuest.ADULT) {
                   adultMenu = true;
                 } else {
@@ -203,8 +204,8 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                   );
                   if (age > 15) {
                     adultMenu = true;
-                  } else if(age < 2){
-                    return (<Typography>{`Il n'y a pas de menu pour les bébés`}</Typography>);
+                  } else if (age < 2) {
+                    noMenu = true;
                   } else {
                     adultMenu = false;
                   }
@@ -226,15 +227,16 @@ export default function GuestConfirmForm({ guests, control }: GuestFormProps) {
                         !control._getWatch(`guests[${index}].dinner`)
                       }
                     >
-                      {adultMenu && (
+                      {adultMenu && !noMenu && (
                         <MenuItem value={MenuEnum.VIANDE}>Viande</MenuItem>
                       )}
-                      {adultMenu && (
+                      {adultMenu && !noMenu && (
                         <MenuItem value={MenuEnum.POISSON}>Poisson</MenuItem>
                       )}
-                      {!adultMenu && (
+                      {!adultMenu && !noMenu && (
                         <MenuItem value={MenuEnum.ENFANT}>Enfant</MenuItem>
                       )}
+                        <MenuItem value={MenuEnum.NO_MENU}>Aucun Menu</MenuItem>
                     </Select>
 
                     {error?.message && (
