@@ -37,6 +37,8 @@ export default function RegisterPage({ userPayload }: any) {
   };
   const route = useRouter();
 
+  const canModify = new Date() < new Date(process.env.NEXT_PUBLIC_DATE_FIN || '2025/02/18')
+
   const { control, handleSubmit, getValues, trigger, formState, setValue } =
     useForm({
       defaultValues: userPayload,
@@ -53,26 +55,26 @@ export default function RegisterPage({ userPayload }: any) {
   const steps = [
     ...(userPayload.repliedAt
       ? [
-          {
-            label: `Récapitulatif du ${format(
-              userPayload.repliedAt,
-              "dd/MM/yyyy à HH:mm"
-            )}`,
-            description: (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  px: 3,
-                }}
-              >
-                <Resume user={getValues()} />
-              </Box>
-            ),
-            validation: () => true,
-          },
-        ]
+        {
+          label: `Récapitulatif du ${format(
+            userPayload.repliedAt,
+            "dd/MM/yyyy à HH:mm"
+          )}`,
+          description: (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                px: 3,
+              }}
+            >
+              <Resume user={getValues()} />
+            </Box>
+          ),
+          validation: () => true,
+        },
+      ]
       : []),
     // {
     //   label: "Invitation",
@@ -86,7 +88,7 @@ export default function RegisterPage({ userPayload }: any) {
     //   ),
     //   validation: () => true,
     // },
-    {
+    ...(canModify ? [{
       label: "Informations personnelles",
       description: (
         <Box
@@ -109,7 +111,7 @@ export default function RegisterPage({ userPayload }: any) {
       },
     },
     {
-      label: `Invitations (${userPayload.guests.filter((g:any)=>g.type === 'adult').length} adultes ${userPayload.guests.filter((g:any)=>g.type !== 'adult').length ? `et ${userPayload.guests.filter((g:any)=>g.type !== 'adult').length} enfants)`:''}`,
+      label: `Invitations (${userPayload.guests.filter((g: any) => g.type === 'adult').length} adultes ${userPayload.guests.filter((g: any) => g.type !== 'adult').length ? `et ${userPayload.guests.filter((g: any) => g.type !== 'adult').length} enfants)` : ''}`,
       description: (
         <Box
           sx={{
@@ -158,34 +160,34 @@ export default function RegisterPage({ userPayload }: any) {
     // },
     ...(userPayload.withDinner
       ? [
-          {
-            label: "Choix du menu",
-            description: (
-              <Box
-                key={"dinnerBox"}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  // height: "100%",
-                  px: 3,
-                }}
-              >
-                <GuestConfirmForm
-                  control={control}
-                  guests={userPayload.guests}
-                />
-              </Box>
-            ),
-            validation: async () => {
-              if (getValues().guests.every((g: Guests) => !g.dinner)) {
-                setOpenModalDinner(true);
-              } else {
-                return await trigger(["guests"]);
-              }
-            },
+        {
+          label: "Choix du menu",
+          description: (
+            <Box
+              key={"dinnerBox"}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                // height: "100%",
+                px: 3,
+              }}
+            >
+              <GuestConfirmForm
+                control={control}
+                guests={userPayload.guests}
+              />
+            </Box>
+          ),
+          validation: async () => {
+            if (getValues().guests.every((g: Guests) => !g.dinner)) {
+              setOpenModalDinner(true);
+            } else {
+              return await trigger(["guests"]);
+            }
           },
-        ]
+        },
+      ]
       : []),
     {
       label: "Récapitulatif",
@@ -202,15 +204,44 @@ export default function RegisterPage({ userPayload }: any) {
         </Box>
       ),
       validation: () => true,
-    },
+    },] : [
+      {
+        label: "Délais dépassé",
+        description: (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              height: '100%',
+              px: 3,
+              textAlign:'center',
+            }}
+          >
+            <h1 style={{fontSize: '30px'}}>Vous ne pouvez plus modifier après le 17 février 2025</h1>
+            <p style={{fontSize: '200px'}}>⌛</p>
+            <p>Vous pouvez toujours contacter les mariés pour <b>ESSAYER</b> de vous arranger</p>
+          </Box>
+        ),
+        validation: () => true,
+      }
+    ])
   ];
 
   async function validForm() {
+
+    if (!canModify) {
+      route.push("/");
+      return
+    }
+
+
     setDisableButtons(true);
     await updateGestsApi(getValues()).then((res: any) => {
       console.log(res.data);
       route.push("/");
-    }).catch(()=>{
+      return;
+    }).catch(() => {
       setDisableButtons(false)
     });
   }
@@ -258,8 +289,8 @@ export default function RegisterPage({ userPayload }: any) {
           height: "100%",
         }}
       >
-        <AppBar position="sticky" sx={{ backgroundColor: "white", height:30 }}>
-          <Toolbar sx={{height:5, display:'block'}}>
+        <AppBar position="sticky" sx={{ backgroundColor: "white", height: 30 }}>
+          <Toolbar sx={{ height: 5, display: 'block' }}>
             <Typography
               variant="body1"
               fontWeight={'bold'}
@@ -267,7 +298,7 @@ export default function RegisterPage({ userPayload }: any) {
               color={'primary'}
               height={'5'}
               component="div"
-              sx={{ flexGrow: 1,}}
+              sx={{ flexGrow: 1, }}
             >
               {steps[activeStep].label}
             </Typography>
@@ -369,7 +400,7 @@ export default function RegisterPage({ userPayload }: any) {
             Vous ne serez pas présent ?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-           {`Vous n'avez sélectionné aucun invité présent.`}
+            {`Vous n'avez sélectionné aucun invité présent.`}
           </Typography>
           <Typography id="modal-modal-description">
             Est ce volotaire ?
