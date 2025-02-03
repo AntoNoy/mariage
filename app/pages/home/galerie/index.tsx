@@ -43,7 +43,7 @@ export default function FestiveMealPage() {
         <Button
         fullWidth
         endIcon={<CloudUploadIcon />}
-        href="http://82.64.187.177//photo/mo/request/A6doKILJP#/"
+        href="https://photo.noyelle.eu/mo/request/A6doKILJP#/"
         target="_blank"
         variant="contained"
       >
@@ -67,7 +67,7 @@ export default function FestiveMealPage() {
           <Button
             fullWidth
             endIcon={<CloudDownloadIcon />}
-            href="http://82.64.187.177//photo/mo/sharing/bRPVmCplw"
+            href="https://photo.noyelle.eu/mo/sharing/bRPVmCplw"
             target="_blank"
             variant="contained"
           >
