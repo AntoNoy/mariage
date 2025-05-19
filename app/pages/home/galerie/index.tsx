@@ -43,7 +43,7 @@ export default function FestiveMealPage() {
         <Button
         fullWidth
         endIcon={<CloudUploadIcon />}
-        href="http://82.64.187.177/photo/mo/request/bpf6cEITu"
+        href="https://le-noyeau.direct.quickconnect.to/photo/mo/request/bpf6cEITu"
         target="_blank"
         variant="contained"
       >
@@ -67,7 +67,7 @@ export default function FestiveMealPage() {
           <Button
             fullWidth
             endIcon={<CloudDownloadIcon />}
-            href="http://82.64.187.177/photo/mo/sharing/6vl13YkFz"
+            href="https://le-noyeau.direct.quickconnect.to/photo/mo/sharing/6vl13YkFz"
             target="_blank"
             variant="contained"
           >
@@ -78,7 +78,7 @@ export default function FestiveMealPage() {
           <Button
             fullWidth
             endIcon={<CloudDownloadIcon />}
-            href="http://82.64.187.177/photo/mo/sharing/bRPVmCplw"
+            href="https://le-noyeau.direct.quickconnect.to/photo/mo/sharing/bRPVmCplw"
             target="_blank"
             variant="contained"
           >
@@ -89,7 +89,7 @@ export default function FestiveMealPage() {
           <Button
             fullWidth
             endIcon={<CloudDownloadIcon />}
-            href="http://82.64.187.177/photo/mo/sharing/ugsSHQtz3"
+            href="https://le-noyeau.direct.quickconnect.to/photo/mo/sharing/ugsSHQtz3"
             target="_blank"
             variant="contained"
           >
