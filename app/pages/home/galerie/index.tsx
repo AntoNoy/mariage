@@ -63,6 +63,17 @@ export default function FestiveMealPage() {
             {`Téléchargez les en cliquant sur le lien ci-dessous et revivez ces moments inoubliables avec nous.`}
           </Typography>
         </CardContent>
+          <CardActions>
+          <Button
+            fullWidth
+            endIcon={<CloudDownloadIcon />}
+            href="http://82.64.187.177/photo/mo/sharing/6vl13YkFz"
+            target="_blank"
+            variant="contained"
+          >
+           Photos du photographe
+          </Button>
+        </CardActions>
         <CardActions>
           <Button
             fullWidth
