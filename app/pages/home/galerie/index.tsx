@@ -43,7 +43,7 @@ export default function FestiveMealPage() {
         <Button
         fullWidth
         endIcon={<CloudUploadIcon />}
-        href="http://82.64.187.177/photo/mo/request/A6doKILJP#/"
+        href="http://82.64.187.177/photo/mo/request/bpf6cEITu"
         target="_blank"
         variant="contained"
       >
@@ -71,7 +71,18 @@ export default function FestiveMealPage() {
             target="_blank"
             variant="contained"
           >
-            Voir les photos
+            Photos des invités
+          </Button>
+        </CardActions>
+        <CardActions>
+          <Button
+            fullWidth
+            endIcon={<CloudDownloadIcon />}
+            href="http://82.64.187.177/photo/mo/sharing/ugsSHQtz3"
+            target="_blank"
+            variant="contained"
+          >
+            Photos du Photoboot
           </Button>
         </CardActions>
       </Card>
